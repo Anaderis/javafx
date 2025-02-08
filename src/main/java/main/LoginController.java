@@ -1,0 +1,91 @@
+package main;
+import javafx.fxml.FXML;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
+
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
+
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import model.Employee;
+import utils.AuthService;
+
+public class LoginController {
+    @FXML
+    private TextField loginField;
+    @FXML
+    private PasswordField passwordField;
+    @FXML
+    private Label errorLabel;
+
+    private static final String BASE_URL = "http://localhost:8081/employee";
+
+    /**
+     * Vérifie les identifiants de l'utilisateur via l'API REST
+     */
+    @FXML
+    private void handleLogin() {
+        String login = loginField.getText();
+        String password = passwordField.getText();
+
+        if (login.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Veuillez remplir tous les champs.");
+            return;
+        }
+
+        try {
+            Employee employee = authenticate(login, password);
+            if (employee != null) {
+                AuthService.setLoggedUser(employee);
+                openMainPage();
+            } else {
+                errorLabel.setText("Identifiants incorrects !");
+            }
+        } catch (Exception e) {
+            errorLabel.setText("Erreur de connexion : " + e.getMessage());
+            e.printStackTrace(); // Affiche l'erreur complète dans la console
+        }
+
+    }
+
+    /**
+     * Envoie le login et le mot de passe à l'API et récupère l'objet Employee
+     */
+    private Employee authenticate(String login, String password) throws Exception {
+        HttpClient client = HttpClient.newHttpClient();
+        String jsonBody = String.format("{\"login\":\"%s\", \"password\":\"%s\"}", login, password);
+
+        System.out.println("🔵 JSON Envoyé : " + jsonBody); // DEBUG
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/employee/login"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(jsonBody, StandardCharsets.UTF_8))
+                .build();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        System.out.println("🟡 Code HTTP : " + response.statusCode()); // DEBUG
+        System.out.println("🟢 Réponse JSON : " + response.body()); // DEBUG
+
+        if (response.statusCode() == 200) {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(response.body(), Employee.class);
+        }
+
+        return null;
+    }
+
+    /**
+     * Ouvre la page principale après connexion
+     */
+    private void openMainPage() {
+        Stage stage = (Stage) loginField.getScene().getWindow();
+        stage.close();
+        Main.showMainView();
+    }
+}
