@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.HomeController">
+    <top>
+        <Label text="Welcome to the Home Page" style="-fx-font-size: 24px; -fx-padding: 10px;" />
+    </top>
+    <center>
+        <VBox spacing="10" alignment="CENTER">
+            <Button fx:id="btnEmployee" text="View Employees" onAction="#handleViewEmployees"/>
+            <Button text="Settings" onAction="#handleSettings"/>
+            <Button fx:id="btnLogout" text="Logout" onAction="#handleLogout"/>
+        </VBox>
+    </center>
+</BorderPane>
+

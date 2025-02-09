@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<?import javafx.collections.FXCollections?>
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.EmployeesController">
+
+    <top>
+        <VBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Label text="Employees List" style="-fx-font-size: 24px;" />
+            <TextField fx:id="searchField" promptText="Search employees..." onKeyReleased="#handleSearch"/>
+        </VBox>
+    </top>
+
+    <center>
+        <ListView fx:id="employeesListView">
+            <items>
+                <FXCollections fx:factory="observableArrayList"/>
+            </items>
+        </ListView>
+    </center>
+
+    <bottom>
+        <Button text="Back to Home" onAction="#handleBackToHome"/>
+    </bottom>
+
+</BorderPane>

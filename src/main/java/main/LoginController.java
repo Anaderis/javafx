@@ -1,5 +1,7 @@
 package main;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 
@@ -41,7 +43,7 @@ public class LoginController {
             Employee employee = authenticate(login, password);
             if (employee != null) {
                 AuthService.setLoggedUser(employee);
-                openMainPage();
+                openHomePage();
             } else {
                 errorLabel.setText("Identifiants incorrects !");
             }
@@ -83,9 +85,17 @@ public class LoginController {
     /**
      * Ouvre la page principale après connexion
      */
-    private void openMainPage() {
-        Stage stage = (Stage) loginField.getScene().getWindow();
-        stage.close();
-        Main.showMainView();
+    private void openHomePage() {
+        try {
+            Stage stage = (Stage) loginField.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/home.fxml"));
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.setTitle("Home");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
 }
