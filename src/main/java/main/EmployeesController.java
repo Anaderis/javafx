@@ -58,6 +58,25 @@ public class EmployeesController {
                 });
     }
 
+    public void loadEmployeesByService(Long serviceId) {
+        String url = "http://localhost:8081/employee/readByService/" + serviceId;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(this::populateList)
+                .exceptionally(e -> {
+                    e.printStackTrace();
+                    return null;
+                });
+    }
+
+
     private void populateList(String responseBody) {
         try {
             ObjectMapper mapper = new ObjectMapper();

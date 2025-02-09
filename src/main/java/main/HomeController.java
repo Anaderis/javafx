@@ -34,6 +34,22 @@ public class HomeController {
         }
     }
 
+    /*-----------On navigue vers page SERVICE------------------*/
+    @FXML
+    private void handleViewServices() {
+        try {
+            Stage stage = (Stage) btnLogout.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/service.fxml"));
+            Scene scene = new Scene(loader.load());
+            stage.setScene(scene);
+            stage.setTitle("Company Services");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     @FXML
     private void handleSettings() {
