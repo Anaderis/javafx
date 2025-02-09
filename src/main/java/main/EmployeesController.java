@@ -76,6 +76,24 @@ public class EmployeesController {
                 });
     }
 
+    public void loadEmployeesBySite(Long siteId) {
+        String url = "http://localhost:8081/employee/readBySite/" + siteId;
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(this::populateList)
+                .exceptionally(e -> {
+                    e.printStackTrace();
+                    return null;
+                });
+    }
+
 
     private void populateList(String responseBody) {
         try {

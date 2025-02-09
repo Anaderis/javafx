@@ -11,6 +11,7 @@
         <VBox spacing="10" alignment="CENTER">
             <Button fx:id="btnEmployee" text="View Employees" onAction="#handleViewEmployees"/>
             <Button text="View Services" onAction="#handleViewServices"/>
+            <Button text="View Sites" onAction="#handleViewSites"/>
             <Button text="Settings" onAction="#handleSettings"/>
             <Button fx:id="btnLogout" text="Logout" onAction="#handleLogout"/>
         </VBox>
