@@ -20,6 +20,7 @@ public class Employee {
     private String login;
     private String password;
     private String photo;
+    private String adminPassword;
 
     private Long siteId; // ID du site
     private Long servicesId;// ID du service
@@ -130,6 +131,14 @@ public class Employee {
 
     public String getPhoto() {
         return photo;
+    }
+
+    public String getAdminPassword() {
+        return adminPassword;
+    }
+
+    public void setAdminPassword(String adminPassword) {
+        this.adminPassword = adminPassword;
     }
 
     public void setPhoto(String photo) {

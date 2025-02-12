@@ -61,12 +61,14 @@ public class EmployeesController {
     public void loadEmployeesByService(Long serviceId) {
         String url = "http://localhost:8081/employee/readByService/" + serviceId;
 
+        //instancie un client http pour envoyer des requêtes au serveur de l'api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
                 .build();
 
+        System.out.println(request);
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(this::populateList)

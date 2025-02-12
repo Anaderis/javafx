@@ -54,12 +54,14 @@ public class ServicesController {
             servicesListView.setItems(serviceList);
             servicesListView.setCellFactory(listView -> new ServiceCell());
 
-            // Handle clicks to filter employees
+            // Handle clicks to filter employees. Détecte les clics sur un service dans la liste
+            //si un service est sélectionné, ouvre la page des employés associés au service
+
             servicesListView.setOnMouseClicked(event -> {
                 Services selectedService = servicesListView.getSelectionModel().getSelectedItem();
-                if (selectedService != null) {
-                    openEmployeesPage(selectedService.getId());
-                }
+                System.out.println(selectedService.getId());
+                openEmployeesPage(selectedService.getId());
+
             });
 
         } catch (Exception e) {
@@ -83,13 +85,15 @@ public class ServicesController {
 
     private void openEmployeesPage(Long serviceId) {
         try {
+            System.out.println("OpenEmployeePage"+ serviceId);
             Stage stage = (Stage) servicesListView.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
             Scene scene = new Scene(loader.load());
 
             EmployeesController controller = loader.getController();
+            //récupère une instance de employee controller pour accéder à la function loadEmployeebyService
             controller.loadEmployeesByService(serviceId); // Load filtered employees
-
+            System.out.println(serviceId);
             stage.setScene(scene);
             stage.setTitle("Employees in Selected Service");
             stage.show();

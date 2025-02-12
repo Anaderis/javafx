@@ -40,6 +40,7 @@ public class LoginController {
         }
 
         try {
+            //authenticate : tente de récupérer un employé correspondant aux identifiants saisis.
             Employee employee = authenticate(login, password);
             if (employee != null) {
                 AuthService.setLoggedUser(employee);
