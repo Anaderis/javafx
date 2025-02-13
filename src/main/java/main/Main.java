@@ -18,7 +18,7 @@ public class Main extends Application {
         try {
             Stage stage = new Stage();
             stage.setTitle("Annuaire Entreprise");
-            stage.setScene(new Scene(FXMLLoader.load(Main.class.getResource("login.fxml"))));
+            stage.setScene(new Scene(FXMLLoader.load(Main.class.getResource("home.fxml"))));
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();

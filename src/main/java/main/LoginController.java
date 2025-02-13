@@ -3,6 +3,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 import java.net.URI;
@@ -14,6 +16,7 @@ import java.nio.charset.StandardCharsets;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import model.Employee;
+import main.AdminController;
 import utils.AuthService;
 
 public class LoginController {
@@ -23,6 +26,10 @@ public class LoginController {
     private PasswordField passwordField;
     @FXML
     private Label errorLabel;
+    @FXML
+    private Button btnLogin;
+
+    AdminController adminController;
 
     private static final String BASE_URL = "http://localhost:8081/employee";
 
@@ -94,6 +101,7 @@ public class LoginController {
             stage.setScene(scene);
             stage.setTitle("Home");
             stage.show();
+            stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();
         }

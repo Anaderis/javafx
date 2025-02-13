@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.EmployeesController"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20px;">
+
+    <Label text="Mise à jour de l'employé" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Prénom :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="surnameField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Email :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="emailField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Adresse :" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <TextField fx:id="addressField" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Code postal :" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <TextField fx:id="postcodeField" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+
+        <Label text="Ville :" GridPane.rowIndex="5" GridPane.columnIndex="0"/>
+        <TextField fx:id="cityField" GridPane.rowIndex="5" GridPane.columnIndex="1"/>
+
+        <Label text="Date d'entrée :" GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+        <DatePicker fx:id="entryDatePicker" GridPane.rowIndex="6" GridPane.columnIndex="1"/>
+
+        <Label text="Téléphone fixe :" GridPane.rowIndex="7" GridPane.columnIndex="0"/>
+        <TextField fx:id="phoneField" GridPane.rowIndex="7" GridPane.columnIndex="1"/>
+
+        <Label text="Mobile :" GridPane.rowIndex="8" GridPane.columnIndex="0"/>
+        <TextField fx:id="mobileField" GridPane.rowIndex="8" GridPane.columnIndex="1"/>
+
+        <Label text="Login :" GridPane.rowIndex="9" GridPane.columnIndex="0"/>
+        <TextField fx:id="loginField" GridPane.rowIndex="9" GridPane.columnIndex="1"/>
+
+        <Label text="Mot de passe :" GridPane.rowIndex="10" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="passwordField" GridPane.rowIndex="10" GridPane.columnIndex="1"/>
+
+        <Label text="Mot de passe admin :" GridPane.rowIndex="11" GridPane.columnIndex="0"/>
+        <PasswordField fx:id="adminPasswordField" GridPane.rowIndex="11" GridPane.columnIndex="1"/>
+
+        <Label text="Photo (URL) :" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
+        <TextField fx:id="photoField" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
+
+        <Label text="Admin :" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
+        <CheckBox fx:id="adminCheckBox" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnSave" text="Enregistrer" onAction="#updateEmployee"/>
+        <Button fx:id="btnCancel" text="Annuler" onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>

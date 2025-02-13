@@ -25,7 +25,7 @@
                   <Font name="Droid Sans Fallback" size="18.0" />
                </font>
             </Label>
-            <Button layoutX="560.0" layoutY="468.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="49.0" prefWidth="140.0" text="Sign In" textAlignment="CENTER">
+            <Button fx:id="btnLogin" layoutX="560.0" layoutY="468.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="49.0" prefWidth="140.0" text="Sign In" textAlignment="CENTER">
                <font>
                   <Font name="Droid Sans Fallback" size="18.0" />
                </font>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.AdminController"
+      spacing="10" alignment="CENTER">
+
+    <Label text="Authentification Admin" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <Label text="Mot de passe :" />
+    <PasswordField fx:id="passwordField" promptText="Entrez le mot de passe..." />
+
+    <Label fx:id="errorLabel" text="" style="-fx-text-fill: red;" />
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnConfirm" text="Valider" onAction="#handleLogin" />
+        <Button text="Annuler" onAction="#handleCancel" />
+    </HBox>
+
+</VBox>
