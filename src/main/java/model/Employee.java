@@ -2,6 +2,8 @@ package model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import main.EmployeesController;
+
 import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Employee {
@@ -12,7 +14,7 @@ public class Employee {
     private String email;
     private String address;
     private String postcode;
-    private Date entrydate;
+    private String entrydate;
     private String city;
     private Boolean admin;
     private String mobile;
@@ -23,7 +25,17 @@ public class Employee {
     private String adminPassword;
 
     private Long siteId; // ID du site
-    private Long servicesId;// ID du service
+    private Long servicesId;
+
+    /*------------SINGLETON--------------*/
+    private static Employee instance;
+
+    public static Employee getInstance(){
+        if(instance==null){
+            instance = new Employee();
+        }
+        return instance;
+    }
 
     public Long getId() {
         return id;
@@ -73,11 +85,11 @@ public class Employee {
         this.postcode = postcode;
     }
 
-    public Date getEntrydate() {
+    public String getEntrydate() {
         return entrydate;
     }
 
-    public void setEntrydate(Date entrydate) {
+    public void setEntrydate(String entrydate) {
         this.entrydate = entrydate;
     }
 

@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="main.EmployeesController"
+      fx:controller="main.EmployeesCRUD"
       spacing="10" alignment="CENTER" style="-fx-padding: 20px;">
 
     <Label text="Mise à jour de l'employé" style="-fx-font-size: 16px; -fx-font-weight: bold;" />

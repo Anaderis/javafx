@@ -51,7 +51,7 @@ public class LoginController {
             Employee employee = authenticate(login, password);
             if (employee != null) {
                 AuthService.setLoggedUser(employee);
-                openHomePage();
+               Main.showMainView();
             } else {
                 errorLabel.setText("Identifiants incorrects !");
             }

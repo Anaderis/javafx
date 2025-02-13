@@ -17,6 +17,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import model.Employee;
 import main.AdminController;
+import utils.SceneManager;
 
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -46,9 +47,18 @@ public class EmployeesController {
 
     private static final String BASE_URL = "http://localhost:8081/employee/read";
 
+    /*------------SINGLETON--------------*/
+    private static EmployeesController instance;
+
+    public static EmployeesController getInstance(){
+        if(instance==null){
+            instance = new EmployeesController();
+        }
+        return instance;
+    }
+
     @FXML
-    public void initialize(AdminController adminController) {
-        btnUpdate.setVisible(adminController.getAdminButton());
+    public void initialize() {
         loadEmployees();
         handleSearch();
     }
@@ -145,6 +155,9 @@ public class EmployeesController {
             Stage stage = (Stage) employeesListView.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/home.fxml"));
             Scene scene = new Scene(loader.load());
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            // Définir la scène avec SceneManager
+            SceneManager.getInstance().changeScene(scene);
             stage.setScene(scene);
             stage.setTitle("Home");
             stage.show();
@@ -160,6 +173,7 @@ public class EmployeesController {
         private final Label emailLabel = new Label();
         private final Label phoneLabel = new Label();
         private final VBox layout = new VBox(nameLabel, emailLabel, phoneLabel, photoView);
+        private final Button updateButton = new Button("Update"); // ✅ Déclare le bouton une seule fois
 
         public EmployeeCell() {
             layout.setSpacing(5);
@@ -171,6 +185,7 @@ public class EmployeesController {
         @Override
         protected void updateItem(Employee employee, boolean empty) {
             super.updateItem(employee, empty);
+
             if (empty || employee == null) {
                 setGraphic(null);
             } else {
@@ -182,10 +197,20 @@ public class EmployeesController {
                     photoView.setImage(new Image(employee.getPhoto(), true));
                 }
 
+                // ✅ Vérifier si l'admin est activé pour ajouter le bouton
+                if (AdminController.getInstance().getAdminButton()) {
+                    if (!layout.getChildren().contains(updateButton)) { // ✅ Évite les doublons
+                        layout.getChildren().add(updateButton);
+                    }
+                } else {
+                    layout.getChildren().remove(updateButton);
+                }
+
                 setGraphic(layout);
             }
         }
     }
+
 
     @FXML
     private void setPopUpUpdateEmployee(Employee employee, AdminController adminController){

@@ -6,6 +6,16 @@ import model.Employee;
 
 
 public class AuthService {
+
+    /*------------SINGLETON--------------*/
+    private static AuthService instance;
+
+    public static AuthService getInstance(){
+        if(instance==null){
+            instance = new AuthService();
+        }
+        return instance;
+    }
     private static Employee loggedUser;
 
     //------------Stock l'utilisateur connecté

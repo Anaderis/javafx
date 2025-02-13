@@ -12,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import utils.AuthService;
 import model.Employee;
+import utils.SceneManager;
 
 public class HomeController {
 
@@ -28,50 +29,8 @@ public class HomeController {
     @FXML
     public void initialize() {
         employee = AuthService.getLoggedUser();
-        if (employee != null && employee.getAdmin()) {
-            System.out.println("Mode Administrateur disponible. Appuyez sur CTRL + ALT + A pour l'activer.");
-
-        // Attendre que la scène soit prête en écoutant la propriété `sceneProperty` du VBox
-        mainContainer.sceneProperty().addListener((obs, oldScene, newScene) -> {
-            if (newScene != null) {
-                newScene.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
-                    if (event.isControlDown() && event.isAltDown() && event.getCode() == KeyCode.A) {
-                        showAdminLoginPopup();
-                        System.out.println("Key pressed: Activation mode admin");
-                    }
-                });
-            }
-        });
-
-        }
     }
 
-    private void showAdminLoginPopup() {
-        try {
-            // Charger le FXML du pop-up d'authentification admin
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/administrator/adminPopUp.fxml"));
-            Parent root = loader.load();
-
-            // Récupérer le contrôleur de la pop-up
-            AdminController adminController = loader.getController();
-
-            // Créer la fenêtre modale
-            Stage popupStage = new Stage();
-            popupStage.initModality(Modality.APPLICATION_MODAL);
-            popupStage.setTitle("Authentification Admin");
-
-            // Passer le stage à `AdminController` si besoin
-            adminController.setPopupStage(popupStage);
-
-            // Afficher la fenêtre
-            Scene scene = new Scene(root);
-            popupStage.setScene(scene);
-            popupStage.showAndWait();
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Erreur lors de l'ouverture de la pop-up admin : " + e.getMessage());
-        }
-    }
 
     @FXML
     private void handleLogout() {
@@ -85,6 +44,8 @@ public class HomeController {
             Stage stage = (Stage) btnEmployee.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
             Scene scene = new Scene(loader.load());
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            SceneManager.getInstance().changeScene(scene);
             stage.setScene(scene);
             stage.setTitle("Employees List");
             stage.show();
@@ -100,6 +61,8 @@ public class HomeController {
             Stage stage = (Stage) btnLogout.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/service.fxml"));
             Scene scene = new Scene(loader.load());
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            SceneManager.getInstance().changeScene(scene);
             stage.setScene(scene);
             stage.setTitle("Company Services");
             stage.show();
@@ -116,6 +79,8 @@ public class HomeController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/site.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            SceneManager.getInstance().changeScene(scene);
             stage.setScene(scene);
             stage.setTitle("Company sites");
             stage.show();
@@ -135,6 +100,8 @@ public class HomeController {
             Stage stage = (Stage) btnLogout.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/login.fxml"));
             Scene scene = new Scene(loader.load());
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            SceneManager.getInstance().changeScene(scene);
             stage.setTitle("Login");
             stage.show();
         } catch (Exception e) {
