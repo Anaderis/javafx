@@ -27,7 +27,7 @@ import java.util.List;
 
 public class EmployeesController {
     @FXML
-    private Button btnUpdate, btnSave, btnCancel;
+    private Button btnUpdate, btnSave, btnCancel, btnConfirm;
     @FXML
     private ListView<Employee> employeesListView;
     @FXML
@@ -157,7 +157,8 @@ public class EmployeesController {
         private final Label emailLabel = new Label();
         private final Label phoneLabel = new Label();
         private final VBox layout = new VBox(nameLabel, emailLabel, phoneLabel, photoView);
-        private final Button updateButton = new Button("Update"); // ✅ Déclare le bouton une seule fois
+        private final Button updateButton = new Button("Mettre à jour"); // ✅ Déclare le bouton une seule fois
+        private final Button deleteButton = new Button("Supprimer"); // ✅ Déclare le bouton une seule fois
 
         public EmployeeCell() {
             layout.setSpacing(5);
@@ -180,20 +181,47 @@ public class EmployeesController {
                 if (employee.getPhoto() != null && !employee.getPhoto().isEmpty()) {
                     photoView.setImage(new Image(employee.getPhoto(), true));
                 }
+
+                layout.getChildren().clear();
+                // si je fais pas ça, il refuse d'afficher les new children. Obligé de faire 3 fois la vérif admin
+                //distinctement, car il ne gère pas add All sur les deux boutons en même temps
+                layout.getChildren().addAll(nameLabel, emailLabel, phoneLabel, photoView);
+
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Update"
                 if (AdminController.getInstance().getAdminButton()) {
                     if (!layout.getChildren().contains(updateButton)) {
-                        layout.getChildren().add(updateButton);
+                        layout.getChildren().addAll(updateButton);
                     }
                 } else {
                     layout.getChildren().remove(updateButton);
                 }
+
+                // ✅ Vérifier si l'admin est activé pour afficher le bouton "Create"
+                if (AdminController.getInstance().getAdminButton()) {
+                    if (!layout.getChildren().contains(deleteButton)) {
+                        layout.getChildren().addAll(deleteButton);
+                    }
+                } else {
+                    layout.getChildren().remove(deleteButton);
+                }
+
                 // ✅ Stocker l'employee correct pour ce bouton
                 updateButton.setOnAction(event -> {
                     EmployeesController controller = EmployeesController.getInstance();
                     if (controller != null) {
                         System.out.println("🟢 Employé cliqué : " + employee.getId() + " - " + employee.getName());
                         controller.handleEmployeesUpdate(employee);
+                    } else {
+                        System.out.println("🔴 Erreur : Impossible de récupérer EmployeesController.");
+                    }
+                });
+
+                // ✅ Stocker l'employee correct pour ce bouton
+                deleteButton.setOnAction(event -> {
+                    EmployeesController controller = EmployeesController.getInstance();
+                    if (controller != null) {
+                        System.out.println("🟢 Employé cliqué : " + employee.getId() + " - " + employee.getName());
+                        controller.handleEmployeesDelete(employee);
                     } else {
                         System.out.println("🔴 Erreur : Impossible de récupérer EmployeesController.");
                     }
@@ -240,6 +268,86 @@ public class EmployeesController {
                 loadEmployees(); // ✅ Recharge la liste après fermeture de la popup
             });
             popupStage.showAndWait();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleEmployeesCreate(Employee selectedEmployee) {
+        if (selectedEmployee == null) {
+            System.out.println("❌ Erreur : Aucun employé sélectionné !");
+            return;
+        }
+
+        System.out.println("🟢 handleEmployeesCreate() - Employé reçu : " + selectedEmployee.getId() + " - " + selectedEmployee.getName());
+
+        try {
+            // Charger le FXML du pop-up d'authentification admin
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/administrator/EmployeeCreate.fxml"));
+            Parent root = loader.load();
+
+            // Récupérer le contrôleur de la pop-up
+            EmployeesCRUD employeesCrudController = loader.getController();
+            employeesCrudController.setEmployee(selectedEmployee);
+
+            // Créer la fenêtre modale
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Création d'un employé");
+
+            // Passer le stage à `AdminController` si besoin
+            employeesCrudController.setPopupStage(popupStage);
+
+            // Afficher la fenêtre
+            Scene scene = new Scene(root);
+            popupStage.setScene(scene);
+            popupStage.setOnHidden(event -> {
+                System.out.println("🔄 Rafraîchissement de la liste des employés...");
+                loadEmployees(); // ✅ Recharge la liste après fermeture de la popup
+            });
+            popupStage.showAndWait();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void handleEmployeesDelete(Employee selectedEmployee) {
+        if (selectedEmployee == null) {
+            System.out.println("❌ Erreur : Aucun employé sélectionné !");
+            return;
+        }
+
+        System.out.println("🟢 handleEmployeesDelete() - Employé reçu : " + selectedEmployee.getId() + " - " + selectedEmployee.getName());
+
+        try {
+            // Charger le FXML du pop-up d'authentification admin
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/administrator/EmployeeDelete.fxml"));
+            Parent root = loader.load();
+            System.out.println("réception du fxml");
+
+            // Récupérer le contrôleur de la pop-up
+            EmployeesCRUD employeesCrudController = loader.getController();
+            employeesCrudController.setEmployee(selectedEmployee);
+
+            // Créer la fenêtre modale
+            Stage popupStage = new Stage();
+            popupStage.initModality(Modality.APPLICATION_MODAL);
+            popupStage.setTitle("Suppression de l'employé");
+            employeesCrudController.setPopupStage(popupStage);
+            // Passer le stage à `AdminController` si besoin
+            //employeesCrudController.setPopupStage(popupStage);
+
+            // Afficher la fenêtre
+            Scene scene = new Scene(root);
+            popupStage.setScene(scene);
+            popupStage.showAndWait();
+            //loadEmployees();
 
 
         } catch (Exception e) {

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.EmployeesCRUD">
+
+    <!-- ✅ Message de confirmation -->
+    <Label text="Êtes-vous sûr de vouloir supprimer cet employé ?"
+           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <!-- ✅ Boutons de confirmation -->
+    <VBox spacing="10" alignment="CENTER">
+        <Button text="Oui" fx:id="btnConfirm"
+                style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 14px;"
+                onAction="#handleDelete"/>
+        <Button text="Annuler" fx:id="btnCancel"
+                style="-fx-background-color: gray; -fx-text-fill: white; -fx-font-size: 14px;"
+                onAction="#handleCancel"/>
+    </VBox>
+
+</VBox>

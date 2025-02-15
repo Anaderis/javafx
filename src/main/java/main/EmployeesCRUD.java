@@ -1,6 +1,7 @@
 package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -32,7 +33,7 @@ public class EmployeesCRUD {
     @FXML
     private DatePicker entryDatePicker;
     @FXML
-    Button btnCancel, btnSave;
+    Button btnCancel, btnSave, btnConfirm;
 
     private Stage popupStage;
     public void setPopupStage(Stage popupStage) {
@@ -42,16 +43,17 @@ public class EmployeesCRUD {
     Employee employee;
     HomeController homeController;
 
+    //Je récupère toutes les infos dont j'ai besoin de l'employee, depuis Employee
     public void setEmployee(Employee employee) {
         this.employee = employee;
-        if (employee != null) {
+        if (employee != null ) {
             System.out.println("Employé reçu : " + employee.getName());
-            nameField.setText(employee.getName());
-            surnameField.setText(employee.getSurname());
-            emailField.setText(employee.getEmail());
-            phoneField.setText(employee.getPhone());
-            cityField.setText(employee.getCity());
-            adminCheckBox.setSelected(employee.getAdmin());
+            if (nameField != null)nameField.setText(employee.getName());
+            if (surnameField != null)surnameField.setText(employee.getSurname());
+            if (emailField != null)emailField.setText(employee.getEmail());
+            if(phoneField != null)phoneField.setText(employee.getPhone());
+            if (cityField!= null)cityField.setText(employee.getCity());
+            if (adminCheckBox != null)adminCheckBox.setSelected(employee.getAdmin());
         }
     }
 
@@ -59,7 +61,7 @@ public class EmployeesCRUD {
     /*----------------------------------UPDATE--------------------------------------------*/
     @FXML
 
-    public void handleSave() {
+    public void handleUpdate() {
         if (this.employee == null || this.employee.getId() == null) {
             System.out.println("❌ Erreur : Aucun employé enregistré ou ID manquant !");
             return;
@@ -119,6 +121,135 @@ public class EmployeesCRUD {
         }
     }
 
+    /*-------------------------------------CREATE-------------------------------------*/
+    @FXML
+    public void handleCreate() {
+        // 🔹 Vérifier que tous les champs sont remplis
+        if (nameField.getText().isEmpty() ||
+                surnameField.getText().isEmpty() ||
+                emailField.getText().isEmpty() ||
+                addressField.getText().isEmpty() ||
+                postcodeField.getText().isEmpty() ||
+                cityField.getText().isEmpty() ||
+                entryDatePicker.getValue() == null ||
+                phoneField.getText().isEmpty() ||
+                mobileField.getText().isEmpty() ||
+                loginField.getText().isEmpty() ||
+                passwordField.getText().isEmpty() ||
+                adminPasswordField.getText().isEmpty() ||
+                photoField.getText().isEmpty()) {
+
+            System.out.println("❌ Erreur : Tous les champs doivent être remplis !");
+            showAlert("Erreur", "Tous les champs sont obligatoires.", Alert.AlertType.ERROR);
+            return;
+        }
+
+        System.out.println("🚀 Création d'un nouvel employé...");
+
+        try {
+            // 🔹 Construire le JSON à envoyer
+            Map<String, Object> employeeData = new HashMap<>();
+            employeeData.put("name", nameField.getText());
+            employeeData.put("surname", surnameField.getText());
+            employeeData.put("email", emailField.getText());
+            employeeData.put("address", addressField.getText());
+            employeeData.put("postcode", postcodeField.getText());
+            employeeData.put("city", cityField.getText());
+            employeeData.put("entrydate", entryDatePicker.getValue().toString());
+            employeeData.put("phone", phoneField.getText());
+            employeeData.put("mobile", mobileField.getText());
+            employeeData.put("login", loginField.getText());
+            employeeData.put("password", passwordField.getText());
+            employeeData.put("adminPassword", adminPasswordField.getText());
+            employeeData.put("photo", photoField.getText());
+            employeeData.put("admin", adminCheckBox.isSelected());
+
+            ObjectMapper objectMapper = new ObjectMapper();
+            String requestBody = objectMapper.writeValueAsString(employeeData);
+
+            // 🔹 URL de création (POST)
+            String apiUrl = "http://localhost:8081/employee/create";
+            System.out.println("📡 URL API : " + apiUrl);
+            System.out.println("📡 Données envoyées : " + requestBody);
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiUrl))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 201) { // 201 = Created
+                System.out.println("✅ Employé créé avec succès !");
+                showAlert("Succès", "Employé créé avec succès.", Alert.AlertType.INFORMATION);
+                popupStage.close();
+            } else {
+                System.out.println("❌ Erreur lors de la création : " + response.body());
+                showAlert("Erreur", "Impossible de créer l'employé. Vérifiez les informations.", Alert.AlertType.ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("❌ Erreur lors de la création de l'employé : " + e.getMessage());
+            showAlert("Erreur", "Une erreur est survenue lors de la création.", Alert.AlertType.ERROR);
+        }
+    }
+
+    /*---------------------------ALERTE CHAMP VIDE CREATE -------------------------*/
+
+    private void showAlert(String title, String message, Alert.AlertType alertType) {
+        Platform.runLater(() -> {
+            Alert alert = new Alert(alertType);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.getButtonTypes().setAll(ButtonType.OK);
+            alert.showAndWait();
+        });
+    }
+
+    /*-----------------------------------DELETE---------------------------------*/
+
+    @FXML
+    public void handleDelete() {
+        if (this.employee == null || this.employee.getId() == null) {
+            System.out.println("❌ Erreur : Aucun employé enregistré ou ID manquant !");
+            return;
+        }
+
+        System.out.println("🗑 Suppression de l'employé ID: " + this.employee.getId());
+
+        try {
+            // 🔹 Vérifie l'URL de l'API pour la suppression
+            String apiUrl = "http://localhost:8081/employee/delete/" + this.employee.getId();
+            System.out.println("📡 URL API : " + apiUrl);
+
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiUrl))
+                    .header("Content-Type", "application/json")
+                    .DELETE() // ✅ Utilisation de DELETE
+                    .build();
+
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() == 200) {
+                System.out.println("✅ Suppression réussie !");
+                Platform.runLater(() -> {
+                    popupStage.close();
+                    EmployeesController.getInstance().loadEmployees(); // ✅ Recharge la liste après suppression
+                });
+            } else {
+                System.out.println("❌ Erreur de suppression : " + response.body());
+                showAlert("Erreur", "Impossible de supprimer cet employé.", Alert.AlertType.ERROR);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("❌ Erreur lors de la suppression de l'employé : " + e.getMessage());
+            showAlert("Erreur", "Une erreur est survenue lors de la suppression.", Alert.AlertType.ERROR);
+        }
+    }
 
 
     public void handleCancel(){
