@@ -16,17 +16,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import model.Employee;
-import main.AdminController;
 import utils.SceneManager;
 
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EmployeesController {
     @FXML
@@ -34,13 +30,9 @@ public class EmployeesController {
     @FXML
     private ListView<Employee> employeesListView;
     @FXML
-    private TextField searchField, nameField, surnameField, emailField, addressField, postcodeField, cityField, phoneField, mobileField, loginField, photoField;; // 🔹 Search input field
-    @FXML
-    private DatePicker entryDatePicker;
-    @FXML
-    private PasswordField passwordField, adminPasswordField;
-    @FXML
-    private CheckBox adminCheckBox;
+    private TextField searchField;
+
+    EmployeesCRUD employeesCRUD;
 
     private ObservableList<Employee> employeeList = FXCollections.observableArrayList();
     private FilteredList<Employee> filteredEmployees;
@@ -149,25 +141,9 @@ public class EmployeesController {
         });
     }
 
-    @FXML
-    private void handleBackToHome() {
-        try {
-            Stage stage = (Stage) employeesListView.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/home.fxml"));
-            Scene scene = new Scene(loader.load());
-            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
-            // Définir la scène avec SceneManager
-            SceneManager.getInstance().changeScene(scene);
-            stage.setScene(scene);
-            stage.setTitle("Home");
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     // 🔹 Custom Cell Factory for ListView (Styled Employee Card)
-    static class EmployeeCell extends ListCell<Employee> {
+     class EmployeeCell extends ListCell<Employee> {
         private final ImageView photoView = new ImageView();
         private final Label nameLabel = new Label();
         private final Label emailLabel = new Label();
@@ -197,113 +173,68 @@ public class EmployeesController {
                     photoView.setImage(new Image(employee.getPhoto(), true));
                 }
 
-                // ✅ Vérifier si l'admin est activé pour ajouter le bouton
-                if (AdminController.getInstance().getAdminButton()) {
-                    if (!layout.getChildren().contains(updateButton)) { // ✅ Évite les doublons
-                        layout.getChildren().add(updateButton);
+                // ✅ Stocker l'employee correct pour ce bouton
+                updateButton.setOnAction(event -> {
+                    EmployeesController controller = EmployeesController.getInstance();
+                    if (controller != null) {
+                        System.out.println("🟢 Employé cliqué : " + employee.getId() + " - " + employee.getName());
+                        controller.handleEmployeesUpdate(employee);
+                    } else {
+                        System.out.println("🔴 Erreur : Impossible de récupérer EmployeesController.");
                     }
-                } else {
-                    layout.getChildren().remove(updateButton);
-                }
+                });
 
                 setGraphic(layout);
             }
         }
+
     }
 
 
     @FXML
-    private void setPopUpUpdateEmployee(Employee employee, AdminController adminController){
-        if(adminController.getAdminButton()){
-            try {
-                // Charger le FXML du pop-up d'authentification admin
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/administrator/updateEmployeePopUp.fxml"));
-                Parent root = loader.load();
-
-                // Créer la fenêtre modale
-                Stage popupStage = new Stage();
-                popupStage.initModality(Modality.APPLICATION_MODAL);
-                popupStage.setTitle("Update Employee");
-
-                // Afficher la fenêtre
-                Scene scene = new Scene(root);
-                popupStage.setScene(scene);
-                popupStage.showAndWait();
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Erreur lors de l'ouverture de la pop-up admin : " + e.getMessage());
-            }
-        }
-
-
-    }
-    @FXML
-    public void updateEmployee(Employee employee, Stage popupStage) {
-        if (employee == null) {
+    public void handleEmployeesUpdate(Employee selectedEmployee) {
+        if (selectedEmployee == null) {
             System.out.println("Erreur : Aucun employé sélectionné !");
             return;
         }
-
+        System.out.println("🟢 handleEmployeesUpdate() - Employé reçu : " + selectedEmployee.getId() + " - " + selectedEmployee.getName());
         try {
-            // 🔹 Créer une Map pour stocker uniquement les champs non vides
-            Map<String, Object> updatedFields = new HashMap<>();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("administrator/EmployeeUpdate.fxml"));
+            Parent root = loader.load();
 
-            if (!nameField.getText().isEmpty()) updatedFields.put("name", nameField.getText());
-            if (!surnameField.getText().isEmpty()) updatedFields.put("surname", surnameField.getText());
-            if (!emailField.getText().isEmpty()) updatedFields.put("email", emailField.getText());
-            if (!addressField.getText().isEmpty()) updatedFields.put("address", addressField.getText());
-            if (!postcodeField.getText().isEmpty()) updatedFields.put("postcode", postcodeField.getText());
-            if (!cityField.getText().isEmpty()) updatedFields.put("city", cityField.getText());
-            if (entryDatePicker.getValue() != null) updatedFields.put("entrydate", entryDatePicker.getValue().toString());
-            if (!phoneField.getText().isEmpty()) updatedFields.put("phone", phoneField.getText());
-            if (!mobileField.getText().isEmpty()) updatedFields.put("mobile", mobileField.getText());
-            if (!loginField.getText().isEmpty()) updatedFields.put("login", loginField.getText());
-            if (!passwordField.getText().isEmpty()) updatedFields.put("password", passwordField.getText());
-            if (!adminPasswordField.getText().isEmpty()) updatedFields.put("adminPassword", adminPasswordField.getText());
-            if (!photoField.getText().isEmpty()) updatedFields.put("photo", photoField.getText());
-            updatedFields.put("admin", adminCheckBox.isSelected()); // 🔹 Admin est un booléen
+            // 🔹 Récupérer le contrôleur de la fenêtre de modification
+            EmployeesCRUD employeesCRUDController = loader.getController();
+            employeesCRUDController.setEmployee(selectedEmployee); // ✅ Passer l'employé
 
-            // Vérifier qu'il y a des champs à mettre à jour
-            if (updatedFields.isEmpty()) {
-                System.out.println("Aucune modification détectée.");
-                return;
-            }
-
-            // 🔹 Convertir en JSON
-            ObjectMapper objectMapper = new ObjectMapper();
-            String requestBody = objectMapper.writeValueAsString(updatedFields);
-
-            // 🔹 Construire la requête HTTP
-            String apiUrl = "http://localhost:3001/employee/update/" + employee.getId();
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(apiUrl))
-                    .header("Content-Type", "application/json")
-                    .PUT(HttpRequest.BodyPublishers.ofString(requestBody, StandardCharsets.UTF_8))
-                    .build();
-
-            // 🔹 Envoyer la requête et récupérer la réponse
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-
-            // 🔹 Vérifier la réponse
-            if (response.statusCode() == 200) {
-                System.out.println("Employé mis à jour avec succès !");
-                popupStage.close(); // Fermer la fenêtre après succès
-            } else {
-                System.out.println("Erreur de mise à jour : " + response.body());
-            }
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Mise à jour employé");
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Erreur lors de la mise à jour de l'employé : " + e.getMessage());
+        }
+    }
+    @FXML
+    private void handleBackToHome() {
+        try {
+            Stage stage = (Stage) employeesListView.getScene().getWindow();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/home.fxml"));
+            Scene scene = new Scene(loader.load());
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            // Définir la scène avec SceneManager
+            SceneManager.getInstance().changeScene(scene);
+            stage.setScene(scene);
+            stage.setTitle("Home");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-    @FXML
-    private void handleCreateEmployee(){
-        return;
-    }
-    @FXML
-    private void handleDeleteEmployee(){
-        return;
-    }
+
+
+
+
 }
+
+

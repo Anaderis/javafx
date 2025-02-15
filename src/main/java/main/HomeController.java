@@ -22,10 +22,19 @@ public class HomeController {
     @FXML
     private VBox mainContainer; // Ajoute cette ligne pour récupérer le VBox principal
     @FXML
-    private Button btnLogout;
+    private Button btnLogout, btnServices, btnSites;
     @FXML
     private Button btnEmployee;
 
+    /*------------SINGLETON--------------*/
+    private static HomeController instance;
+
+    public static HomeController getInstance(){
+        if(instance==null){
+            instance = new HomeController();
+        }
+        return instance;
+    }
     @FXML
     public void initialize() {
         employee = AuthService.getLoggedUser();
@@ -39,7 +48,7 @@ public class HomeController {
     }
 
     @FXML
-    private void handleViewEmployees() {
+    public void handleViewEmployees() {
         try {
             Stage stage = (Stage) btnEmployee.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
@@ -58,7 +67,7 @@ public class HomeController {
     @FXML
     private void handleViewServices() {
         try {
-            Stage stage = (Stage) btnLogout.getScene().getWindow();
+            Stage stage = (Stage) btnServices.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/service.fxml"));
             Scene scene = new Scene(loader.load());
             SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
@@ -75,7 +84,7 @@ public class HomeController {
     @FXML
     private void handleViewSites() {
         try {
-            Stage stage = (Stage) btnLogout.getScene().getWindow();
+            Stage stage = (Stage) btnSites.getScene().getWindow();
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/site.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
@@ -87,12 +96,6 @@ public class HomeController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-
-    @FXML
-    private void handleSettings() {
-        System.out.println("Navigate to Settings Page"); // Replace with actual navigation
     }
 
     private void loadLoginPage() {

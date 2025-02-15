@@ -55,7 +55,7 @@
     </GridPane>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button fx:id="btnSave" text="Enregistrer" onAction="#updateEmployee"/>
+        <Button fx:id="btnSave" text="Enregistrer" onAction="#handleSave"/>
         <Button fx:id="btnCancel" text="Annuler" onAction="#handleCancel"/>
     </HBox>
 
