@@ -95,7 +95,12 @@ public class AdminController {
                 // Afficher la fenêtre
                 Scene scene = new Scene(root);
                 popupStage.setScene(scene);
+                popupStage.setOnHidden(event -> {
+                    System.out.println("🔄 Rafraîchissement de la liste des employés...");
+                    EmployeesController.getInstance().loadEmployees();
+                });
                 popupStage.showAndWait();
+
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("Erreur lors de l'ouverture de la pop-up admin : " + e.getMessage());

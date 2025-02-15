@@ -34,6 +34,11 @@ public class EmployeesCRUD {
     @FXML
     Button btnCancel, btnSave;
 
+    private Stage popupStage;
+    public void setPopupStage(Stage popupStage) {
+        this.popupStage = popupStage;
+    }
+
     Employee employee;
     HomeController homeController;
 
@@ -104,7 +109,7 @@ public class EmployeesCRUD {
 
             if (response.statusCode() == 200) {
                 System.out.println("✅ Mise à jour réussie !");
-                backEmployeePage();
+                popupStage.close();
             } else {
                 System.out.println("❌ Erreur de mise à jour : " + response.body());
             }
@@ -118,32 +123,12 @@ public class EmployeesCRUD {
 
     public void handleCancel(){
         try {
-        Stage stage = (Stage) btnCancel.getScene().getWindow();
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
-        Scene scene = new Scene(loader.load());
-        SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
-        SceneManager.getInstance().changeScene(scene);
-        stage.setScene(scene);
-        stage.setTitle("Employees List");
-        stage.show();
+            popupStage.close();
         } catch (Exception e) {
             e.printStackTrace();
     }
     }
 
-    public void backEmployeePage(){
-        try {
-            Stage stage = (Stage) btnSave.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
-            Scene scene = new Scene(loader.load());
-            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
-            SceneManager.getInstance().changeScene(scene);
-            stage.setScene(scene);
-            stage.setTitle("Employees List");
-            stage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
 }
