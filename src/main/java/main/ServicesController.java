@@ -1,5 +1,6 @@
 package main;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -16,6 +17,7 @@ import java.net.http.HttpResponse;
 import java.net.URI;
 import java.util.List;
 import model.Services;
+import model.Site;
 
 public class ServicesController {
 
@@ -67,6 +69,33 @@ public class ServicesController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    /*-------------------LISTE spécifique à la création d'un client, sans filtre-----------------*/
+    public static ObservableList<Services> getServicesList() {
+        ObservableList<Services> servicesList = FXCollections.observableArrayList();
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/services/read"))
+                .GET()
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(response -> {
+                    Platform.runLater(() -> {
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            List<Services> services = mapper.readValue(response, new TypeReference<List<Services>>() {});
+                            servicesList.addAll(services);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                });
+
+        return servicesList;
     }
 
     @FXML

@@ -276,13 +276,7 @@ public class EmployeesController {
     }
 
     @FXML
-    public void handleEmployeesCreate(Employee selectedEmployee) {
-        if (selectedEmployee == null) {
-            System.out.println("❌ Erreur : Aucun employé sélectionné !");
-            return;
-        }
-
-        System.out.println("🟢 handleEmployeesCreate() - Employé reçu : " + selectedEmployee.getId() + " - " + selectedEmployee.getName());
+    public void handleEmployeesCreate() {
 
         try {
             // Charger le FXML du pop-up d'authentification admin
@@ -291,7 +285,6 @@ public class EmployeesController {
 
             // Récupérer le contrôleur de la pop-up
             EmployeesCRUD employeesCrudController = loader.getController();
-            employeesCrudController.setEmployee(selectedEmployee);
 
             // Créer la fenêtre modale
             Stage popupStage = new Stage();

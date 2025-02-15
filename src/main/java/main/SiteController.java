@@ -2,6 +2,7 @@ package main;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -46,7 +47,7 @@ public class SiteController {
                 });
     }
 
-    private void populateList(String responseBody) {
+    public void populateList(String responseBody) {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Site> site = mapper.readValue(responseBody, new TypeReference<List<Site>>() {});
@@ -67,6 +68,33 @@ public class SiteController {
             e.printStackTrace();
         }
     }
+    /*-------------------LISTE spécifique à la création d'un client, sans filtre-----------------*/
+    public static ObservableList<Site> getSiteList() {
+        ObservableList<Site> siteList = FXCollections.observableArrayList();
+
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("http://localhost:8081/site/read"))
+                .GET()
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenAccept(response -> {
+                    Platform.runLater(() -> {
+                        try {
+                            ObjectMapper mapper = new ObjectMapper();
+                            List<Site> sites = mapper.readValue(response, new TypeReference<List<Site>>() {});
+                            siteList.addAll(sites);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+                });
+
+        return siteList;
+    }
+
 
     @FXML
     private void handleBackToHome() {

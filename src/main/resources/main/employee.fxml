@@ -11,7 +11,9 @@
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Label text="Employees List" style="-fx-font-size: 24px;" />
+            <Label  text="Employees List" style="-fx-font-size: 24px;" />
+            <Button text="Back to Home" onAction="#handleBackToHome"/>
+            <Button fx:id="createEmployee" text="Créer un employé" onAction="#handleEmployeesCreate"/>
             <TextField fx:id="searchField" promptText="Search employees..." onKeyReleased="#handleSearch"/>
 
         </VBox>

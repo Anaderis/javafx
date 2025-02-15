@@ -50,6 +50,9 @@
         <Label text="Photo (URL) :" GridPane.rowIndex="12" GridPane.columnIndex="0"/>
         <TextField fx:id="photoField" GridPane.rowIndex="12" GridPane.columnIndex="1"/>
 
+        <ComboBox fx:id="siteComboBox" promptText="Sélectionnez un site" />
+        <ComboBox fx:id="servicesComboBox" promptText="Sélectionnez un service" />
+
         <Label text="Admin :" GridPane.rowIndex="13" GridPane.columnIndex="0"/>
         <CheckBox fx:id="adminCheckBox" GridPane.rowIndex="13" GridPane.columnIndex="1"/>
     </GridPane>

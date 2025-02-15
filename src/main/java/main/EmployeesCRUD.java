@@ -2,12 +2,16 @@ package main;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import model.Employee;
+import model.Services;
+import model.Site;
 import utils.AuthService;
 import utils.SceneManager;
 
@@ -20,7 +24,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+
+
 public class EmployeesCRUD {
+
+
 
     /*--------------------------CHAMPS DU FORMULAIRE UPDATE-----------------------------*/
     @FXML
@@ -34,6 +42,10 @@ public class EmployeesCRUD {
     private DatePicker entryDatePicker;
     @FXML
     Button btnCancel, btnSave, btnConfirm;
+    @FXML
+    private ComboBox<Site> siteComboBox; // Liste déroulante pour les sites
+    @FXML
+    private ComboBox<Services> servicesComboBox; // Liste déroulante pour les sites
 
     private Stage popupStage;
     public void setPopupStage(Stage popupStage) {
@@ -42,6 +54,51 @@ public class EmployeesCRUD {
 
     Employee employee;
     HomeController homeController;
+
+
+
+    public void initialize() {
+        /*----------------Liste des sites menu déroulant----------------*/
+        ObservableList<Site> siteList = SiteController.getSiteList();
+        siteComboBox.setItems(siteList);
+
+        // 🔹 Convertit les objets `Site` en texte pour l'affichage
+        siteComboBox.setConverter(new StringConverter<Site>() {
+            @Override
+            public String toString(Site site) {
+                return site != null ? site.getName() : "";
+            }
+
+            @Override
+            public Site fromString(String string) {
+                return siteComboBox.getItems().stream()
+                        .filter(site -> site.getName().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+
+        /*----------------Liste des services menu déroulant----------------*/
+        ObservableList<Services> servicesList = ServicesController.getServicesList();
+        servicesComboBox.setItems(servicesList);
+
+        // 🔹 Convertit les objets `Site` en texte pour l'affichage
+        servicesComboBox.setConverter(new StringConverter<Services>() {
+            @Override
+            public String toString(Services services) {
+                return services != null ? services.getName() : "";
+            }
+
+            @Override
+            public Services fromString(String string) {
+                return servicesComboBox.getItems().stream()
+                        .filter(services -> services.getName().equals(string))
+                        .findFirst()
+                        .orElse(null);
+            }
+        });
+    }
+
 
     //Je récupère toutes les infos dont j'ai besoin de l'employee, depuis Employee
     public void setEmployee(Employee employee) {
@@ -62,6 +119,10 @@ public class EmployeesCRUD {
     @FXML
 
     public void handleUpdate() {
+
+        Site selectedSite = siteComboBox.getValue();
+        Services selectedServices = servicesComboBox.getValue();
+
         if (this.employee == null || this.employee.getId() == null) {
             System.out.println("❌ Erreur : Aucun employé enregistré ou ID manquant !");
             return;
@@ -85,6 +146,8 @@ public class EmployeesCRUD {
             if (!passwordField.getText().isEmpty()) updatedFields.put("password", passwordField.getText());
             if (!adminPasswordField.getText().isEmpty()) updatedFields.put("adminPassword", adminPasswordField.getText());
             if (!photoField.getText().isEmpty()) updatedFields.put("photo", photoField.getText());
+            if (selectedSite!=null)updatedFields.put("sit_id", selectedSite.getId());
+            if (selectedServices!=null)updatedFields.put("ser_id", selectedServices.getId());
             updatedFields.put("admin", adminCheckBox.isSelected());
 
             if (updatedFields.isEmpty()) {
@@ -109,7 +172,7 @@ public class EmployeesCRUD {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
                 System.out.println("✅ Mise à jour réussie !");
                 popupStage.close();
             } else {
@@ -124,6 +187,10 @@ public class EmployeesCRUD {
     /*-------------------------------------CREATE-------------------------------------*/
     @FXML
     public void handleCreate() {
+
+        Site selectedSite = siteComboBox.getValue();
+        Services selectedServices = servicesComboBox.getValue();
+
         // 🔹 Vérifier que tous les champs sont remplis
         if (nameField.getText().isEmpty() ||
                 surnameField.getText().isEmpty() ||
@@ -137,12 +204,15 @@ public class EmployeesCRUD {
                 loginField.getText().isEmpty() ||
                 passwordField.getText().isEmpty() ||
                 adminPasswordField.getText().isEmpty() ||
-                photoField.getText().isEmpty()) {
+                photoField.getText().isEmpty() ||
+                selectedServices == null ||
+                selectedSite == null) {  // 🔹 Correction ici, la parenthèse est bien fermée avant `selectedSite == null`
 
             System.out.println("❌ Erreur : Tous les champs doivent être remplis !");
             showAlert("Erreur", "Tous les champs sont obligatoires.", Alert.AlertType.ERROR);
             return;
         }
+
 
         System.out.println("🚀 Création d'un nouvel employé...");
 
@@ -163,6 +233,10 @@ public class EmployeesCRUD {
             employeeData.put("adminPassword", adminPasswordField.getText());
             employeeData.put("photo", photoField.getText());
             employeeData.put("admin", adminCheckBox.isSelected());
+            employeeData.put("siteId", selectedSite.getId());
+            employeeData.put("servicesId", selectedServices.getId());
+            System.out.println("Service Id: " + selectedServices.getId());
+            System.out.println("Site Id: " + selectedSite.getId());
 
             ObjectMapper objectMapper = new ObjectMapper();
             String requestBody = objectMapper.writeValueAsString(employeeData);
@@ -180,15 +254,21 @@ public class EmployeesCRUD {
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            System.out.println("📡 Réponse reçue : " + response.statusCode() + " - " + response.body());
 
-            if (response.statusCode() == 201) { // 201 = Created
+
+            if (response.statusCode() == 200 || response.statusCode() == 201) { // 201 = Created
                 System.out.println("✅ Employé créé avec succès !");
                 showAlert("Succès", "Employé créé avec succès.", Alert.AlertType.INFORMATION);
                 popupStage.close();
             } else {
-                System.out.println("❌ Erreur lors de la création : " + response.body());
-                showAlert("Erreur", "Impossible de créer l'employé. Vérifiez les informations.", Alert.AlertType.ERROR);
+                System.out.println("❌ Erreur lors de la création de l'employé !");
+                System.out.println("📡 Code HTTP : " + response.statusCode());
+                System.out.println("📡 Réponse du serveur : " + response.body());
+
+                showAlert("Erreur", "Impossible de créer l'employé.\nDétails : " + response.body(), Alert.AlertType.ERROR);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("❌ Erreur lors de la création de l'employé : " + e.getMessage());
@@ -234,7 +314,7 @@ public class EmployeesCRUD {
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            if (response.statusCode() == 200) {
+            if (response.statusCode() == 200 || response.statusCode() == 201) {
                 System.out.println("✅ Suppression réussie !");
                 Platform.runLater(() -> {
                     popupStage.close();
