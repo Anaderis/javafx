@@ -5,7 +5,7 @@
 
 <VBox xmlns="http://javafx.com/javafx/8"
       xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="main.ServicesCRUD"
+      fx:controller="main.CRUD.ServicesCRUD"
       spacing="10" alignment="CENTER" style="-fx-padding: 20px;">
 
     <Label text="Mise à jour du service" style="-fx-font-size: 16px; -fx-font-weight: bold;" />

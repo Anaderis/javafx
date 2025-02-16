@@ -90,21 +90,6 @@ public class LoginController {
         return null;
     }
 
-    /**
-     * Ouvre la page principale après connexion
-     */
-    private void openHomePage() {
-        try {
-            Stage stage = (Stage) loginField.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/home.fxml"));
-            Scene scene = new Scene(loader.load());
-            stage.setScene(scene);
-            stage.setTitle("Home");
-            stage.show();
-            stage.setScene(scene);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+
 
 }

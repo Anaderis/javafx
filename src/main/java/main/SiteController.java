@@ -13,7 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import model.Employee;
+import main.CRUD.SiteCRUD;
 import model.Site;
 
 import java.net.URI;
@@ -26,6 +26,8 @@ public class SiteController {
 
     @FXML
     private ListView<Site> siteListView;
+    @FXML
+    private Button createSite;
 
     private static final String BASE_URL = "http://localhost:8081/site/read"; // API Endpoint
 
@@ -43,6 +45,15 @@ public class SiteController {
     public void initialize() {
         instance = this;
         loadSite();
+        updateCreateSiteButtonVisibility();
+    }
+
+    public void updateCreateSiteButtonVisibility() {
+        Platform.runLater(() -> {
+            boolean isAdmin = AdminController.getInstance().getAdminButton();
+            createSite.setVisible(isAdmin);  // Rend le bouton visible/invisible
+            createSite.setManaged(isAdmin);  // Ajuste l'espace dans le layout
+        });
     }
 
     /*----------------Connexion API envoi requête HTTP - GET----------------*/
@@ -66,6 +77,7 @@ public class SiteController {
     /*------------------ Affichage de la Liste des sites ---------------------------*/
 
     public void populateList(String responseBody) {
+        Platform.runLater(() -> {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Site> site = mapper.readValue(responseBody, new TypeReference<List<Site>>() {});
@@ -90,6 +102,7 @@ public class SiteController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        });
     }
     /*-------------------LISTE spécifique à la création d'un client ( CREATE EMPLOYEE), sans filtre-----------------*/
     public static ObservableList<Site> getSiteList() {
@@ -141,7 +154,7 @@ public class SiteController {
     /*--------------- Création des éléments de la liste : design, boutons etc-----------------*/
             /*--- Récupère la fonction updateItem de Employee et la modifie----*/
 
-    static class SiteCell extends ListCell<Site> {
+    class SiteCell extends ListCell<Site> {
 
         private final Label nameLabel = new Label();
         private final Label cityLabel = new Label();
@@ -169,6 +182,7 @@ public class SiteController {
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Update"
                 if (AdminController.getInstance().getAdminButton()) {
+                    updateCreateSiteButtonVisibility();
                     if (!layout.getChildren().contains(updateButton)) {
                         layout.getChildren().addAll(updateButton);
                     }
@@ -178,6 +192,7 @@ public class SiteController {
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Delete"
                 if (AdminController.getInstance().getAdminButton()) {
+                    updateCreateSiteButtonVisibility();
                     if (!layout.getChildren().contains(deleteButton)) {
                         layout.getChildren().addAll(deleteButton);
                     }

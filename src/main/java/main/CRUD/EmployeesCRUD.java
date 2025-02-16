@@ -1,26 +1,25 @@
-package main;
+package main.CRUD;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
+import main.EmployeesController;
+import main.HomeController;
+import main.ServicesController;
+import main.SiteController;
 import model.Employee;
 import model.Services;
 import model.Site;
-import utils.AuthService;
-import utils.SceneManager;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 

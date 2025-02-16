@@ -18,13 +18,17 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
 import java.util.List;
+
+import main.CRUD.ServicesCRUD;
 import model.Services;
-import model.Site;
 
 public class ServicesController {
 
     @FXML
     private ListView<Services> servicesListView;
+    @FXML
+    private Button createServices;
+
 
     private static final String BASE_URL = "http://localhost:8081/services/read"; // API Endpoint
 
@@ -41,7 +45,19 @@ public class ServicesController {
     public void initialize() {
         instance = this;
         loadServices();
+
+        // Masquer ou afficher le bouton selon le statut admin
+        updateCreateServicesButtonVisibility();
     }
+
+    public void updateCreateServicesButtonVisibility() {
+        Platform.runLater(() -> {
+            boolean isAdmin = AdminController.getInstance().getAdminButton();
+            createServices.setVisible(isAdmin);  // Rend le bouton visible/invisible
+            createServices.setManaged(isAdmin);  // Ajuste l'espace dans le layout
+        });
+    }
+
 
     /*----------------Connexion API envoi requête HTTP - GET----------------*/
     public void loadServices() {
@@ -63,6 +79,7 @@ public class ServicesController {
     /*------------------ Affichage de la Liste des services ---------------------------*/
 
     private void populateList(String responseBody) {
+        Platform.runLater(() -> {
         try {
             ObjectMapper mapper = new ObjectMapper();
             List<Services> services = mapper.readValue(responseBody, new TypeReference<List<Services>>() {});
@@ -87,6 +104,7 @@ public class ServicesController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        });
     }
 
     /*-------------------LISTE spécifique à la création d'un client, sans filtre-----------------*/
@@ -141,7 +159,7 @@ public class ServicesController {
     /*--------------- Création des éléments de la liste : design, boutons etc-----------------*/
     /*--- Récupère la fonction updateItem de Employee et la modifie----*/
 
-    static class ServiceCell extends ListCell<Services> {
+    class ServiceCell extends ListCell<Services> {
 
         private final Label nameLabel = new Label();
         private final Label employeeCountLabel = new Label();
@@ -169,6 +187,7 @@ public class ServicesController {
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Update"
                 if (AdminController.getInstance().getAdminButton()) {
+                    updateCreateServicesButtonVisibility();
                     if (!layout.getChildren().contains(updateButton)) {
                         layout.getChildren().addAll(updateButton);
                     }
@@ -178,6 +197,7 @@ public class ServicesController {
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Delete"
                 if (AdminController.getInstance().getAdminButton()) {
+                    updateCreateServicesButtonVisibility();
                     if (!layout.getChildren().contains(deleteButton)) {
                         layout.getChildren().addAll(deleteButton);
                     }

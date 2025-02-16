@@ -1,5 +1,6 @@
 package utils;
 
+import main.AdminController;
 import model.Employee;
 
 /*----------------Stockage de l'utilisateur en mémoire et vérification mode Admin---------------*/
@@ -32,6 +33,7 @@ public class AuthService {
     }
     //------------Déconnecte l'utilisateur
     public static void logout() {
+        AdminController.getInstance().setAdminButton(false);
         loggedUser = null;
     }
 }

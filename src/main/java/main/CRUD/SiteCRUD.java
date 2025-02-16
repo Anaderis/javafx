@@ -1,4 +1,4 @@
-package main;
+package main.CRUD;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
@@ -8,7 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import model.Services;
+import main.HomeController;
+import main.SiteController;
 import model.Site;
 
 import java.net.URI;

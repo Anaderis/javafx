@@ -16,6 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import main.CRUD.EmployeesCRUD;
 import model.Employee;
 import utils.SceneManager;
 
@@ -31,6 +32,8 @@ public class EmployeesController {
     private ListView<Employee> employeesListView;
     @FXML
     private TextField searchField;
+    @FXML
+    private Button createEmployee;
 
 
     private ObservableList<Employee> employeeList = FXCollections.observableArrayList();
@@ -53,6 +56,15 @@ public class EmployeesController {
         instance = this;
         loadEmployees();
         handleSearch();
+        updateCreateEmployeesButtonVisibility();
+    }
+
+    public void updateCreateEmployeesButtonVisibility() {
+        Platform.runLater(() -> {
+            boolean isAdmin = AdminController.getInstance().getAdminButton();
+            createEmployee.setVisible(isAdmin);  // Rend le bouton visible/invisible
+            createEmployee.setManaged(isAdmin);  // Ajuste l'espace dans le layout
+        });
     }
 
     /*----------------Connexion API envoi requête HTTP - GET----------------*/
@@ -198,6 +210,7 @@ public class EmployeesController {
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Update"
                 if (AdminController.getInstance().getAdminButton()) {
+                    updateCreateEmployeesButtonVisibility();
                     if (!layout.getChildren().contains(updateButton)) {
                         layout.getChildren().addAll(updateButton);
                     }
@@ -207,6 +220,7 @@ public class EmployeesController {
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Create"
                 if (AdminController.getInstance().getAdminButton()) {
+                    updateCreateEmployeesButtonVisibility();
                     if (!layout.getChildren().contains(deleteButton)) {
                         layout.getChildren().addAll(deleteButton);
                     }

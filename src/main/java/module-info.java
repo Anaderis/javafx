@@ -17,4 +17,6 @@ module org.annuaire.annuairejavafx {
 
     exports main;
     exports model;
+    exports main.CRUD;
+    opens main.CRUD to com.fasterxml.jackson.databind, javafx.fxml;
 }
