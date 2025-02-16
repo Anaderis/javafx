@@ -10,6 +10,17 @@ public class Site {
     private String email;
     private String phone;
 
+
+    /*------------SINGLETON--------------*/
+    private static Site instance;
+
+    public static Site getInstance(){
+        if(instance==null){
+            instance = new Site();
+        }
+        return instance;
+    }
+
     public Long getId() {
         return id;
     }

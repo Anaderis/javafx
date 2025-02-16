@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="main.ServicesCRUD"
+      spacing="10" alignment="CENTER" style="-fx-padding: 20px;">
+
+    <Label text="Mise à jour du service" style="-fx-font-size: 16px; -fx-font-weight: bold;" />
+
+    <GridPane hgap="10" vgap="10">
+        <Label text="Nom :" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Nombre de salariés :" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <TextField fx:id="headcountField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Description :" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <TextField fx:id="descriptionField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+    </GridPane>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button fx:id="btnSave" text="Enregistrer" onAction="#handleUpdate"/>
+        <Button fx:id="btnCancel" text="Annuler" onAction="#handleCancel"/>
+    </HBox>
+
+</VBox>

@@ -6,6 +6,8 @@
 
     <top>
         <Label text="Company Services" style="-fx-font-size: 24px; -fx-padding: 10px;" />
+        <Button fx:id="createServices" text="Créer un service" onAction="#handleServicesCreate"/>
+
     </top>
 
     <center>

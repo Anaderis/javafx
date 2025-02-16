@@ -26,14 +26,12 @@ import java.net.URI;
 import java.util.List;
 
 public class EmployeesController {
-    @FXML
-    private Button btnUpdate, btnSave, btnCancel, btnConfirm;
+
     @FXML
     private ListView<Employee> employeesListView;
     @FXML
     private TextField searchField;
 
-    EmployeesCRUD employeesCRUD;
 
     private ObservableList<Employee> employeeList = FXCollections.observableArrayList();
     private FilteredList<Employee> filteredEmployees;
@@ -57,6 +55,8 @@ public class EmployeesController {
         handleSearch();
     }
 
+    /*----------------Connexion API envoi requête HTTP - GET----------------*/
+
     public void loadEmployees() {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -72,6 +72,8 @@ public class EmployeesController {
                     return null;
                 });
     }
+
+    /*--------------------Recherche Employé PAR SERVICE ------------------------*/
 
     public void loadEmployeesByService(Long serviceId) {
         String url = "http://localhost:8081/employee/readByService/" + serviceId;
@@ -93,6 +95,9 @@ public class EmployeesController {
                 });
     }
 
+    /*--------------------Recherche Employé PAR SITE ------------------------*/
+
+
     public void loadEmployeesBySite(Long siteId) {
         String url = "http://localhost:8081/employee/readBySite/" + siteId;
 
@@ -111,6 +116,7 @@ public class EmployeesController {
                 });
     }
 
+    /*------------------ Affichage de la Liste des employés ---------------------------*/
 
     private void populateList(String responseBody) {
         Platform.runLater(() -> {
@@ -133,6 +139,7 @@ public class EmployeesController {
             }
         });
     }
+    /*---------------------Filtre employé - Recherche par lettre---------------------*/
     @FXML
     private void handleSearch() {
         searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -142,6 +149,7 @@ public class EmployeesController {
                 }
                 String lowerCaseFilter = newValue.toLowerCase();
 
+                /* --- Filtre à la touche sur : le contenu du mail, nom, et prénom --------*/
                 return employee.getName().toLowerCase().contains(lowerCaseFilter) ||
                         employee.getSurname().toLowerCase().contains(lowerCaseFilter) ||
                         employee.getEmail().toLowerCase().contains(lowerCaseFilter);
@@ -150,15 +158,16 @@ public class EmployeesController {
     }
 
 
-    // 🔹 Custom Cell Factory for ListView (Styled Employee Card)
+    /*--------------- Création des éléments de la liste : design, boutons etc-----------------*/
+
      class EmployeeCell extends ListCell<Employee> {
         private final ImageView photoView = new ImageView();
         private final Label nameLabel = new Label();
         private final Label emailLabel = new Label();
         private final Label phoneLabel = new Label();
         private final VBox layout = new VBox(nameLabel, emailLabel, phoneLabel, photoView);
-        private final Button updateButton = new Button("Mettre à jour"); // ✅ Déclare le bouton une seule fois
-        private final Button deleteButton = new Button("Supprimer"); // ✅ Déclare le bouton une seule fois
+        private final Button updateButton = new Button("Mettre à jour");
+        private final Button deleteButton = new Button("Supprimer");
 
         public EmployeeCell() {
             layout.setSpacing(5);

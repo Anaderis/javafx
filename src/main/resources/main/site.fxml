@@ -6,6 +6,8 @@
 
     <top>
         <Label text="Company Sites" style="-fx-font-size: 24px; -fx-padding: 10px;" />
+        <Button fx:id="createSite" text="Créer un site" onAction="#handleSiteCreate"/>
+
     </top>
 
     <center>

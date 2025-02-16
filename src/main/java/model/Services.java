@@ -3,13 +3,19 @@ package model;
 public class Services {
 
     private Long id;
-    //@Column(name = "ser_name")
     private String name;
-    //@Column(name = "ser_headcount")
-    private int  headcount;
-    //@Column(name = "ser_description")
+    private String  headcount;
     private String description;
 
+    /*------------SINGLETON--------------*/
+    private static Services instance;
+
+    public static Services getInstance(){
+        if(instance==null){
+            instance = new Services();
+        }
+        return instance;
+    }
     public Long getId() {
         return id;
     }
@@ -26,11 +32,11 @@ public class Services {
         this.name = name;
     }
 
-    public int getHeadcount() {
+    public String getHeadcount() {
         return headcount;
     }
 
-    public void setHeadcount(int headcount) {
+    public void setHeadcount(String headcount) {
         this.headcount = headcount;
     }
 

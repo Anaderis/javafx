@@ -133,6 +133,8 @@ public class EmployeesCRUD {
         try {
             Map<String, Object> updatedFields = new HashMap<>();
 
+            /*---On récupère dans le field du formulaire la donnée, que l'on intègre dans le champ JSON associé--*/
+
             if (!nameField.getText().isEmpty()) updatedFields.put("name", nameField.getText());
             if (!surnameField.getText().isEmpty()) updatedFields.put("surname", surnameField.getText());
             if (!emailField.getText().isEmpty()) updatedFields.put("email", emailField.getText());
@@ -148,7 +150,7 @@ public class EmployeesCRUD {
             if (!photoField.getText().isEmpty()) updatedFields.put("photo", photoField.getText());
             if (selectedSite!=null)updatedFields.put("sit_id", selectedSite.getId());
             if (selectedServices!=null)updatedFields.put("ser_id", selectedServices.getId());
-            updatedFields.put("admin", adminCheckBox.isSelected());
+            if (adminCheckBox.isSelected())updatedFields.put("admin", adminCheckBox.isSelected());
 
             if (updatedFields.isEmpty()) {
                 System.out.println("Aucune modification détectée.");
@@ -206,7 +208,7 @@ public class EmployeesCRUD {
                 adminPasswordField.getText().isEmpty() ||
                 photoField.getText().isEmpty() ||
                 selectedServices == null ||
-                selectedSite == null) {  // 🔹 Correction ici, la parenthèse est bien fermée avant `selectedSite == null`
+                selectedSite == null) {
 
             System.out.println("❌ Erreur : Tous les champs doivent être remplis !");
             showAlert("Erreur", "Tous les champs sont obligatoires.", Alert.AlertType.ERROR);
