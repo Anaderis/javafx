@@ -2,13 +2,17 @@ package main;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import utils.SceneManager;
 
 public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
+
         // Initialisation du SceneManager
         SceneManager.getInstance().setPrimaryStage(primaryStage);
 
