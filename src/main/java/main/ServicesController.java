@@ -3,6 +3,7 @@ package main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -168,8 +169,12 @@ public class ServicesController {
         private final Button deleteButton = new Button("Supprimer");
 
         public ServiceCell() {
-            layout.setSpacing(5);
-            layout.setStyle("-fx-padding: 10px; -fx-border-color: lightgray; -fx-border-radius: 5px; -fx-background-color: #f9f9f9;");
+            layout.setSpacing(2);
+            layout.setStyle("-fx-padding: 10px; -fx-border-color: lightgray; -fx-border-radius: 5px; -fx-background-color: white; -fx-text-fill: black; -fx-font-family: 'Droid Sans Fallback'; -fx-font-size: 18px;");
+            updateButton.setStyle("-fx-background-color: #db6da8; -fx-text-fill:  black;");
+            deleteButton.setStyle("-fx-background-color: #4f5f70; -fx-text-fill: white;");
+            updateButton.setCursor(Cursor.HAND);
+            deleteButton.setCursor(Cursor.HAND);
         }
 
         @Override

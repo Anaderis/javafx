@@ -10,20 +10,20 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('update.jpg');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.EmployeesController">
+<BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('update.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.EmployeesController">
 
     <top>
         <VBox spacing="10" style="-fx-background-color: #a0d2ca;">
             <padding>
                 <Insets bottom="10" left="10" right="10" top="10" />
             </padding>
-            <Label style="-fx-font-size: 24px;" text="Liste des employés" textFill="WHITE" />
-            <Button onAction="#handleBackToHome" style="-fx-background-color: #4f5f70;" text="Back to Home" textFill="WHITE" />
+            <Label style="-fx-font-size: 24px;" text="Liste des employés" textFill="#4f5f70" />
+            <Button onAction="#handleBackToHome" style="-fx-background-color: #4f5f70;" text="Retour" textFill="WHITE" />
             <Button fx:id="createEmployee" onAction="#handleEmployeesCreate" style="-fx-background-color: #db6da8;" text="Créer un employé">
             <font>
                <Font name="Droid Sans Fallback" size="13.0" />
             </font></Button>
-            <TextField fx:id="searchField" onKeyReleased="#handleSearch" promptText="Search employees..." text="Entre ta recherche ici" />
+            <TextField fx:id="searchField" onKeyReleased="#handleSearch" prefHeight="64.0" prefWidth="1260.0" promptText="Entre ta recherche ici" />
 
         </VBox>
 
@@ -37,8 +37,5 @@
         </ListView>
     </center>
 
-    <bottom>
-        <Button onAction="#handleBackToHome" style="-fx-background-color: #4f5f70;" text="Back to Home" textFill="WHITE" />
-    </bottom>
 
 </BorderPane>

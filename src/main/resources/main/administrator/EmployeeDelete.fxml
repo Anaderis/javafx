@@ -1,24 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox spacing="20" alignment="CENTER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.CRUD.EmployeesCRUD">
+<VBox alignment="CENTER" prefHeight="500.0" prefWidth="500.0" spacing="20" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.CRUD.EmployeesCRUD">
 
     <!-- ✅ Message de confirmation -->
-    <Label text="Êtes-vous sûr de vouloir supprimer cet employé ?"
-           style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+    <Label style="-fx-font-size: 18px; -fx-font-weight: bold;" text="Êtes-vous sûr de vouloir supprimer cet employé ?" />
 
     <!-- ✅ Boutons de confirmation -->
-    <VBox spacing="10" alignment="CENTER">
-        <Button text="Oui" fx:id="btnConfirm"
-                style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 14px;"
-                onAction="#handleDelete"/>
-        <Button text="Annuler" fx:id="btnCancel"
-                style="-fx-background-color: gray; -fx-text-fill: white; -fx-font-size: 14px;"
-                onAction="#handleCancel"/>
+    <VBox alignment="CENTER" spacing="10">
+        <Button fx:id="btnConfirm" onAction="#handleDelete" style="-fx-background-color: red; -fx-text-fill: white; -fx-font-size: 14px;" text="Oui" />
+        <Button fx:id="btnCancel" onAction="#handleCancel" style="-fx-background-color: gray; -fx-text-fill: white; -fx-font-size: 14px;" text="Annuler" />
     </VBox>
 
 </VBox>

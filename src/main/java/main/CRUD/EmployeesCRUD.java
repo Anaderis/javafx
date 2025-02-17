@@ -96,6 +96,8 @@ public class EmployeesCRUD {
                         .orElse(null);
             }
         });
+
+        photoField.setText("http://example.png");
     }
 
 

@@ -10,26 +10,64 @@
 
 <BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('home.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.HomeController">
     <center>
-        <VBox fx:id="mainContainer" alignment="TOP_CENTER" opacity="0.9" spacing="50.0">
-            <Button fx:id="btnEmployee" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleViewEmployees" style="-fx-background-color: #3c86ae; -fx-background-radius: 5;" text="Les employés Kybu" textFill="WHITE">
+        <VBox fx:id="mainContainer" alignment="TOP_CENTER" opacity="0.9" spacing="30.0">
+            <Button fx:id="btnEmployee" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleViewEmployees" text="Les employés Kybu" textFill="WHITE" style="-fx-background-color: #4f5f70;
+                -fx-text-fill: white;
+                -fx-font-size: 20px;
+                -fx-padding: 10px 20px;
+                -fx-background-radius: 8px;
+                -fx-border-radius: 8px;
+                -fx-border-color: #3a4b5c;
+                -fx-border-width: 2px;
+                -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
+                -fx-transition: all 0.3s;" >
             <font>
-               <Font name="Droid Sans Fallback" size="20.0" />
+               <Font name="Droid Sans Fallback"  />
             </font>
             <cursor>
                <Cursor fx:constant="OPEN_HAND" />
             </cursor></Button>
-            <Button fx:id="btnServices" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewServices" style="-fx-background-color: #3c86ae; -fx-background-radius: 5px;" text="Les services Kybu" textFill="WHITE">
+            <Button fx:id="btnServices" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewServices" textFill="WHITE" style=" -fx-background-color: #4f5f70;
+                -fx-text-fill: white;
+                -fx-font-size: 20px;
+                -fx-padding: 10px 20px;
+                -fx-background-radius: 8px;
+                -fx-border-radius: 8px;
+                -fx-border-color: #3a4b5c;
+                -fx-border-width: 2px;
+                -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
+                -fx-transition: all 0.3s;" text="Les services Kybu" >
             <font>
-               <Font name="Droid Sans Fallback" size="20.0" />
+               <Font name="Droid Sans Fallback"  />
             </font></Button>
-            <Button fx:id="btnSites" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewSites" style="-fx-background-color: #3c86ae; -fx-background-radius: 5px;" text="Nos sites en France" textFill="WHITE">
-            <font>
-               <Font size="20.0" />
-            </font></Button>
-            <Button fx:id="btnLogout" alignment="CENTER" contentDisplay="CENTER" onAction="#handleLogout" style="-fx-background-color: #a54b47; -fx-background-radius: 5px;" text="Logout" textFill="WHITE">
-            <font>
-               <Font size="15.0" />
-            </font></Button>
+            <Button fx:id="btnSites" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewSites" text="Nos sites en France" textFill="WHITE" style="-fx-background-color: #4f5f70;
+                -fx-text-fill: white;
+                -fx-font-size: 20px;
+                -fx-padding: 10px 20px;
+                -fx-background-radius: 8px;
+                -fx-border-radius: 8px;
+                -fx-border-color: #3a4b5c;
+                -fx-border-width: 2px;
+                -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
+                -fx-transition: all 0.3s;">
+                <font>
+                    <Font name="Droid Sans Fallback"  />
+                </font>
+           </Button>
+            <Button fx:id="btnLogout" alignment="CENTER" contentDisplay="CENTER" onAction="#handleLogout" text="Déconnexion" textFill="WHITE" style="-fx-background-color: #db6da8;
+                -fx-text-fill: white;
+                -fx-font-size: 20px;
+                -fx-padding: 10px 20px;
+                -fx-background-radius: 8px;
+                -fx-border-radius: 8px;
+                -fx-border-color: #8c519b;
+                -fx-border-width: 2px;
+                -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
+                -fx-transition: all 0.3s;" >
+                <font>
+                    <Font name="Droid Sans Fallback"  />
+                </font>
+           </Button>
          <cursor>
             <Cursor fx:constant="OPEN_HAND" />
          </cursor>
