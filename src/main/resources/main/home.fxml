@@ -11,13 +11,12 @@
 <BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('home.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.HomeController">
     <center>
         <VBox fx:id="mainContainer" alignment="TOP_CENTER" opacity="0.9" spacing="30.0">
-            <Button fx:id="btnEmployee" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleViewEmployees" text="Les employés Kybu" textFill="WHITE" style="-fx-background-color: #4f5f70;
+            <Button fx:id="btnEmployee" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleViewEmployees" text="Les employés Kybu" textFill="WHITE" style="-fx-background-color: black;
                 -fx-text-fill: white;
                 -fx-font-size: 20px;
                 -fx-padding: 10px 20px;
                 -fx-background-radius: 8px;
                 -fx-border-radius: 8px;
-                -fx-border-color: #3a4b5c;
                 -fx-border-width: 2px;
                 -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
                 -fx-transition: all 0.3s;" >
@@ -27,26 +26,24 @@
             <cursor>
                <Cursor fx:constant="OPEN_HAND" />
             </cursor></Button>
-            <Button fx:id="btnServices" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewServices" textFill="WHITE" style=" -fx-background-color: #4f5f70;
+            <Button fx:id="btnServices" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewServices" textFill="WHITE" style=" -fx-background-color: black;
                 -fx-text-fill: white;
                 -fx-font-size: 20px;
                 -fx-padding: 10px 20px;
                 -fx-background-radius: 8px;
                 -fx-border-radius: 8px;
-                -fx-border-color: #3a4b5c;
                 -fx-border-width: 2px;
                 -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
                 -fx-transition: all 0.3s;" text="Les services Kybu" >
             <font>
                <Font name="Droid Sans Fallback"  />
             </font></Button>
-            <Button fx:id="btnSites" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewSites" text="Nos sites en France" textFill="WHITE" style="-fx-background-color: #4f5f70;
+            <Button fx:id="btnSites" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewSites" text="Nos sites en France" textFill="WHITE" style="-fx-background-color: black;
                 -fx-text-fill: white;
                 -fx-font-size: 20px;
                 -fx-padding: 10px 20px;
                 -fx-background-radius: 8px;
                 -fx-border-radius: 8px;
-                -fx-border-color: #3a4b5c;
                 -fx-border-width: 2px;
                 -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
                 -fx-transition: all 0.3s;">
@@ -54,13 +51,11 @@
                     <Font name="Droid Sans Fallback"  />
                 </font>
            </Button>
-            <Button fx:id="btnLogout" alignment="CENTER" contentDisplay="CENTER" onAction="#handleLogout" text="Déconnexion" textFill="WHITE" style="-fx-background-color: #db6da8;
+            <Button fx:id="btnLogout" alignment="CENTER" contentDisplay="CENTER" onAction="#handleLogout" text="Déconnexion" textFill="WHITE" style="-fx-background-color: black;
                 -fx-text-fill: white;
                 -fx-font-size: 20px;
                 -fx-padding: 10px 20px;
                 -fx-background-radius: 8px;
-                -fx-border-radius: 8px;
-                -fx-border-color: #8c519b;
                 -fx-border-width: 2px;
                 -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.2), 8, 0, 0, 4);
                 -fx-transition: all 0.3s;" >

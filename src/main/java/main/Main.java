@@ -25,7 +25,7 @@ public class Main extends Application {
         // Définir la scène avec SceneManager
         SceneManager.getInstance().changeScene(scene);
 
-        primaryStage.setTitle("Connexion");
+        primaryStage.setTitle("Kybu");
         primaryStage.show();
     }
 
