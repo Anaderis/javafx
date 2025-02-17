@@ -3,36 +3,32 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('ac.jpeg');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.HomeController">
-    <top>
-        <Label style="-fx-font-size: 24px; -fx-padding: 10px;" text="Bienvenue chez Kybu !" />
-    </top>
+<BorderPane prefHeight="720.0" prefWidth="1280.0" style="-fx-background-image: url('home.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.HomeController">
     <center>
-        <VBox fx:id="mainContainer" alignment="CENTER" opacity="0.9" spacing="10">
-            <Button fx:id="btnEmployee" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewEmployees" style="-fx-background-color: #3c86ae; -fx-background-radius: 5;" text="Les employés Kybu" textFill="WHITE">
+        <VBox fx:id="mainContainer" alignment="TOP_CENTER" opacity="0.9" spacing="50.0">
+            <Button fx:id="btnEmployee" alignment="BOTTOM_CENTER" nodeOrientation="RIGHT_TO_LEFT" onAction="#handleViewEmployees" style="-fx-background-color: #3c86ae; -fx-background-radius: 5;" text="Les employés Kybu" textFill="WHITE">
             <font>
-               <Font name="Droid Sans Fallback" size="28.0" />
+               <Font name="Droid Sans Fallback" size="20.0" />
             </font>
             <cursor>
                <Cursor fx:constant="OPEN_HAND" />
             </cursor></Button>
-            <Button fx:id="btnServices" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewServices" style="-fx-background-color: #3c86ae; -fx-background-radius: 5px;" text="Nos services" textFill="WHITE">
+            <Button fx:id="btnServices" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewServices" style="-fx-background-color: #3c86ae; -fx-background-radius: 5px;" text="Les services Kybu" textFill="WHITE">
             <font>
-               <Font name="Droid Sans Fallback" size="28.0" />
+               <Font name="Droid Sans Fallback" size="20.0" />
             </font></Button>
-            <Button fx:id="btnSites" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewSites" style="-fx-background-color: #3c86ae; -fx-background-radius: 5px;" text="Nos sites" textFill="WHITE">
+            <Button fx:id="btnSites" alignment="CENTER" contentDisplay="CENTER" onAction="#handleViewSites" style="-fx-background-color: #3c86ae; -fx-background-radius: 5px;" text="Nos sites en France" textFill="WHITE">
             <font>
-               <Font size="28.0" />
+               <Font size="20.0" />
             </font></Button>
             <Button fx:id="btnLogout" alignment="CENTER" contentDisplay="CENTER" onAction="#handleLogout" style="-fx-background-color: #a54b47; -fx-background-radius: 5px;" text="Logout" textFill="WHITE">
             <font>
-               <Font size="20.0" />
+               <Font size="15.0" />
             </font></Button>
          <cursor>
             <Cursor fx:constant="OPEN_HAND" />
@@ -41,8 +37,11 @@
             <Blend />
          </effect>
          <BorderPane.margin>
-            <Insets right="900.0" />
+            <Insets />
          </BorderPane.margin>
+         <padding>
+            <Insets right="830.0" top="280.0" />
+         </padding>
         </VBox>
     </center>
 </BorderPane>

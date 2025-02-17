@@ -183,7 +183,7 @@ public class EmployeesController {
 
         public EmployeeCell() {
             layout.setSpacing(5);
-            layout.setStyle("-fx-padding: 10px; -fx-border-color: lightgray; -fx-border-radius: 5px; -fx-background-color: #f9f9f9;");
+            layout.setStyle("-fx-padding: 10px; -fx-border-color: lightgray; -fx-border-radius: 5px; -fx-background-color: white; -fx-text-fill: black; -fx-font-family: 'Droid Sans Fallback'; -fx-font-size: 18px;");
             photoView.setFitWidth(50);
             photoView.setFitHeight(50);
         }
