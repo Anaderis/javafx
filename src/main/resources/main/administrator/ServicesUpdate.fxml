@@ -14,14 +14,14 @@
     <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" textFill="WHITE" text="Mise à jour du service" />
 
     <GridPane alignment="CENTER" hgap="10" prefHeight="196.0" prefWidth="460.0" vgap="10">
-        <Label text="Nom :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-        <Label text="Nom :" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+        <Label text="Nom :" GridPane.columnIndex="0" GridPane.rowIndex="0" textFill="WHITE" />
+        <Label text="Nom :" GridPane.columnIndex="0" GridPane.rowIndex="0" textFill="WHITE" />
         <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="0" />
 
-        <Label text="Nombre de salariés :" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+        <Label text="Nombre de salariés :" GridPane.columnIndex="0" GridPane.rowIndex="1" textFill="WHITE" />
         <TextField fx:id="headcountField" GridPane.columnIndex="1" GridPane.rowIndex="1" />
 
-        <Label text="Description :" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+        <Label text="Description :" GridPane.columnIndex="0" GridPane.rowIndex="2" textFill="WHITE"/>
         <TextField fx:id="descriptionField" GridPane.columnIndex="1" GridPane.rowIndex="2" />
       <columnConstraints>
          <ColumnConstraints maxWidth="139.0" minWidth="124.0" prefWidth="139.0" />

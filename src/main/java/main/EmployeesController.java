@@ -96,22 +96,26 @@ public class EmployeesController {
     public void loadEmployeesByService(Long serviceId) {
         String url = "http://localhost:8081/employee/readByService/" + serviceId;
 
-        //instancie un client http pour envoyer des requêtes au serveur de l'api
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
                 .build();
 
-        System.out.println(request);
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenAccept(this::populateList)
+                .thenAccept(responseBody -> {
+                    Platform.runLater(() -> {
+                        employeeList.clear(); // ✅ Vide la liste avant de la mettre à jour
+                        populateList(responseBody);
+                    });
+                })
                 .exceptionally(e -> {
                     e.printStackTrace();
                     return null;
                 });
     }
+
 
     /*--------------------Recherche Employé PAR SITE ------------------------*/
 
@@ -127,12 +131,18 @@ public class EmployeesController {
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenAccept(this::populateList)
+                .thenAccept(responseBody -> {
+                    Platform.runLater(() -> {
+                        employeeList.clear(); // ✅ Vide la liste avant de la mettre à jour
+                        populateList(responseBody);
+                    });
+                })
                 .exceptionally(e -> {
                     e.printStackTrace();
                     return null;
                 });
     }
+
 
     /*------------------ Affichage de la Liste des employés ---------------------------*/
 
@@ -140,23 +150,32 @@ public class EmployeesController {
         Platform.runLater(() -> {
             try {
                 ObjectMapper mapper = new ObjectMapper();
-                List<Employee> employees = mapper.readValue(responseBody, new TypeReference<List<Employee>>() {
-                });
+                List<Employee> employees = mapper.readValue(responseBody, new TypeReference<List<Employee>>() {});
+
+                employeeList.clear(); // ✅ Efface les anciens résultats avant d'ajouter les nouveaux
+
+                if (employees.isEmpty()) {
+                    System.out.println("⚠️ Aucun employé trouvé. La liste est vide.");
+                    employeesListView.setItems(null); // Supprime la liste si vide
+                    return;
+                }
+
                 employeeList.setAll(employees);
 
-                // 🔹 Create a filtered list and bind it to ListView
+                // 🔹 Rafraîchit la liste filtrée et l'associe à la ListView
                 filteredEmployees = new FilteredList<>(employeeList, p -> true);
                 employeesListView.setItems(filteredEmployees);
                 employeesListView.setCellFactory(listView -> new EmployeeCell());
-                employeesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE); // Permet la sélection unique
-                employeesListView.getSelectionModel().clearSelection(); // Empêche de garder la sélection après un clic
-                employeesListView.setFocusTraversable(false); // Désactive le focus sur la liste
+                employeesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
+                employeesListView.getSelectionModel().clearSelection();
+                employeesListView.setFocusTraversable(false);
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
     }
+
     /*---------------------Filtre employé - Recherche par lettre---------------------*/
     @FXML
     private void handleSearch() {
@@ -213,7 +232,7 @@ public class EmployeesController {
                 emailLabel.setText("📧 " + employee.getEmail());
                 phoneLabel.setText("📞 " + employee.getPhone());
                 serviceLabel.setText("Service : " + employee.getServiceName());
-                siteLabel.setText("Site : " + employee.getSiteName());
+                siteLabel.setText("Site : " + employee.getSiteCity());
 
 
                 System.out.println(employee.getServiceName());

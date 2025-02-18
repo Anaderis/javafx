@@ -281,7 +281,7 @@ public class EmployeesCRUD {
                 System.out.println("📡 Code HTTP : " + response.statusCode());
                 System.out.println("📡 Réponse du serveur : " + response.body());
 
-                showAlert("Erreur", "Impossible de créer l'employé.\nDétails : " + response.body(), Alert.AlertType.ERROR);
+                showAlert("Erreur", "Impossible de créer l'employé.\n " , Alert.AlertType.ERROR);
             }
 
         } catch (Exception e) {

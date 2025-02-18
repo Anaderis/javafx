@@ -235,7 +235,7 @@ public class SiteCRUD {
                 System.out.println("📡 Code HTTP : " + response.statusCode());
                 System.out.println("📡 Réponse du serveur : " + response.body());
 
-                showAlert("Erreur", "Impossible de créer le site.\nDétails : " + response.body(), Alert.AlertType.ERROR);
+                showAlert("Erreur", "Impossible de créer le site.\n ", Alert.AlertType.ERROR);
             }
 
         } catch (Exception e) {

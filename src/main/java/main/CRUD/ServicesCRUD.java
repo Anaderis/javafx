@@ -214,7 +214,7 @@ public class ServicesCRUD {
                 System.out.println("📡 Code HTTP : " + response.statusCode());
                 System.out.println("📡 Réponse du serveur : " + response.body());
 
-                showAlert("Erreur", "Impossible de créer le service.\nDétails : " + response.body(), Alert.AlertType.ERROR);
+                showAlert("Erreur", "Impossible de créer le service.\n" , Alert.AlertType.ERROR);
             }
 
         } catch (Exception e) {

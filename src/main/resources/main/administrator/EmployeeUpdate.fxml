@@ -13,51 +13,51 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="CENTER" prefHeight="700.0" prefWidth="554.0" spacing="10" style="-fx-padding: 20px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.CRUD.EmployeesCRUD">
+<VBox alignment="CENTER" prefHeight="700.0" prefWidth="554.0" spacing="10" style="-fx-background-image: url('500-2.png'); -fx-padding: 20px;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.CRUD.EmployeesCRUD">
 
-    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" text="Mise à jour de l'employé" />
+    <Label style="-fx-font-size: 16px; -fx-font-weight: bold;" textFill="WHITE" text="Mise à jour de l'employé" />
 
     <GridPane alignment="CENTER" hgap="10" prefHeight="631.0" prefWidth="514.0" vgap="10">
-        <Label text="Nom :" GridPane.rowIndex="4" />
+        <Label textFill="WHITE" text="Nom :" GridPane.rowIndex="4" />
         <TextField fx:id="nameField" GridPane.columnIndex="1" GridPane.rowIndex="4" />
 
-        <Label text="Prénom :" GridPane.rowIndex="5" />
+        <Label textFill="WHITE" text="Prénom :" GridPane.rowIndex="5" />
         <TextField fx:id="surnameField" GridPane.columnIndex="1" GridPane.rowIndex="5" />
 
-        <Label text="Email :" GridPane.rowIndex="6" />
+        <Label textFill="WHITE" text="Email :" GridPane.rowIndex="6" />
         <TextField fx:id="emailField" GridPane.columnIndex="1" GridPane.rowIndex="6" />
 
-        <Label text="Adresse :" GridPane.rowIndex="7" />
+        <Label textFill="WHITE" text="Adresse :" GridPane.rowIndex="7" />
         <TextField fx:id="addressField" GridPane.columnIndex="1" GridPane.rowIndex="7" />
 
-        <Label text="Code postal :" GridPane.rowIndex="8" />
+        <Label textFill="WHITE" text="Code postal :" GridPane.rowIndex="8" />
         <TextField fx:id="postcodeField" GridPane.columnIndex="1" GridPane.rowIndex="8" />
 
-        <Label text="Ville :" GridPane.rowIndex="9" />
+        <Label textFill="WHITE" text="Ville :" GridPane.rowIndex="9" />
         <TextField fx:id="cityField" GridPane.columnIndex="1" GridPane.rowIndex="9" />
 
-        <Label text="Date d'entrée :" GridPane.rowIndex="10" />
+        <Label textFill="WHITE" text="Date d'entrée :" GridPane.rowIndex="10" />
         <DatePicker fx:id="entryDatePicker" GridPane.columnIndex="1" GridPane.rowIndex="10" />
 
-        <Label text="Téléphone fixe :" GridPane.rowIndex="11" />
+        <Label textFill="WHITE" text="Téléphone fixe :" GridPane.rowIndex="11" />
         <TextField fx:id="phoneField" GridPane.columnIndex="1" GridPane.rowIndex="11" />
 
-        <Label text="Mobile :" GridPane.rowIndex="12" />
+        <Label textFill="WHITE" text="Mobile :" GridPane.rowIndex="12" />
         <TextField fx:id="mobileField" GridPane.columnIndex="1" GridPane.rowIndex="12" />
 
-        <Label text="Login :" GridPane.rowIndex="13" />
+        <Label textFill="WHITE" text="Login :" GridPane.rowIndex="13" />
         <TextField fx:id="loginField" GridPane.columnIndex="1" GridPane.rowIndex="13" />
 
-        <Label text="Mot de passe :" GridPane.rowIndex="14" />
+        <Label textFill="WHITE" text="Mot de passe :" GridPane.rowIndex="14" />
         <PasswordField fx:id="passwordField" GridPane.columnIndex="1" GridPane.rowIndex="14" />
 
-        <Label text="Mot de passe admin :" GridPane.rowIndex="15" />
+        <Label textFill="WHITE" text="Mot de passe admin :" GridPane.rowIndex="15" />
         <PasswordField fx:id="adminPasswordField" GridPane.columnIndex="1" GridPane.rowIndex="15" />
 
-        <Label text="Photo (URL) :" GridPane.rowIndex="16" />
+        <Label textFill="WHITE" text="Photo (URL) :" GridPane.rowIndex="16" />
         <TextField fx:id="photoField" GridPane.columnIndex="1" GridPane.rowIndex="16" />
 
-        <Label text="Admin :" GridPane.rowIndex="17" />
+        <Label textFill="WHITE" text="Admin :" GridPane.rowIndex="17" />
 
         <CheckBox fx:id="adminCheckBox" GridPane.columnIndex="1" GridPane.rowIndex="17" />
         <ComboBox fx:id="siteComboBox" promptText="Sélectionnez un site" GridPane.rowIndex="2" />
@@ -91,8 +91,8 @@
     </GridPane>
 
     <HBox alignment="CENTER" spacing="10">
-        <Button fx:id="btnSave" onAction="#handleUpdate" text="Enregistrer" />
-        <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler" />
+        <Button fx:id="btnSave" onAction="#handleUpdate" text="Enregistrer" style="-fx-background-color: #4f5f70;" textFill="WHITE"/>
+        <Button fx:id="btnCancel" onAction="#handleCancel" text="Annuler" style="-fx-background-color: #4f5f70;" textFill="WHITE"/>
     </HBox>
 
 </VBox>

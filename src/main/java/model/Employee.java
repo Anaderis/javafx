@@ -45,6 +45,19 @@ public class Employee {
     private Long servicesId;
     private String serviceName;
     private String siteName;
+    private String siteCity;
+
+    public String getSiteCity() {
+        return siteCity;
+    }
+
+    public void setSiteCity(String siteCity) {
+        this.siteCity = siteCity;
+    }
+
+    public static void setInstance(Employee instance) {
+        Employee.instance = instance;
+    }
 
     /*------------SINGLETON--------------*/
     private static Employee instance;

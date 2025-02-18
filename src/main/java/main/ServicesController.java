@@ -81,6 +81,7 @@ public class ServicesController {
                         for (Services service : servicesList) {
                             servicesMap.put(service.getId(), service.getName());
                         }
+                        Platform.runLater(() -> populateList(response));
 
                         System.out.println("✅ Liste des services chargée avec succès !");
                     } catch (Exception e) {
