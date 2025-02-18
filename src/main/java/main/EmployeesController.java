@@ -3,12 +3,14 @@ package main;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -204,21 +206,38 @@ public class EmployeesController {
         private final Label phoneLabel = new Label();
         private final Label serviceLabel = new Label();
         private final Label siteLabel = new Label();
-        private final VBox layout = new VBox(nameLabel, emailLabel, phoneLabel, photoView);
-        private final Button updateButton = new Button("Mettre à jour");
+         private final VBox infoBox = new VBox(nameLabel, emailLabel, phoneLabel);
+         private final VBox serviceSiteBox = new VBox(serviceLabel, siteLabel);
+         private final HBox buttonBox = new HBox();
+         private final HBox layout = new HBox(infoBox, serviceSiteBox);
+         private final Button updateButton = new Button("Mettre à jour");
         private final Button deleteButton = new Button("Supprimer");
 
         public EmployeeCell() {
-            layout.setSpacing(2);
-            layout.setStyle("-fx-padding: 10px; -fx-border-color: lightgray; -fx-border-radius: 5px; -fx-background-color: white; -fx-text-fill: black; -fx-font-family: 'Droid Sans Fallback'; -fx-font-size: 18px;");
-            updateButton.setStyle("-fx-background-color: #db6da8; -fx-text-fill:  black;");
-            deleteButton.setStyle("-fx-background-color: #4f5f70; -fx-text-fill: white;");
+            layout.setSpacing(15);
+            layout.setStyle("-fx-padding: 15px; -fx-border-color: #e0e0e0; -fx-border-radius: 10px; -fx-background-color: #ffffff; -fx-font-size: 16px; -fx-alignment: center-left;");
+
+            infoBox.setSpacing(5);
+            serviceSiteBox.setSpacing(5);
+            serviceSiteBox.setAlignment(Pos.CENTER_RIGHT); // Alignement à droite
+
+            buttonBox.setSpacing(10);
+            buttonBox.getChildren().addAll(updateButton, deleteButton);
+            buttonBox.setAlignment(Pos.CENTER_RIGHT);
+
+            // 🌟 Style des labels
+            nameLabel.setStyle("-fx-font-weight: bold; -fx-font-size: 18px;");
+            emailLabel.setStyle("-fx-text-fill: gray;");
+            phoneLabel.setStyle("-fx-text-fill: gray;");
+            serviceLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #007bff;"); // Couleur bleue
+            siteLabel.setStyle("-fx-font-weight: bold; -fx-text-fill: #28a745;"); // Couleur verte
+
+            // 🌟 Style des boutons
+            updateButton.setStyle("-fx-background-color: #ffcc00; -fx-text-fill: black; -fx-font-weight: bold; -fx-background-radius: 5px;");
+            deleteButton.setStyle("-fx-background-color: #ff4444; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5px;");
 
             updateButton.setCursor(Cursor.HAND);
             deleteButton.setCursor(Cursor.HAND);
-            photoView.setFitWidth(50);
-            photoView.setFitHeight(50);
-            photoView.setX(100);
         }
 
         @Override
@@ -231,19 +250,17 @@ public class EmployeesController {
                 nameLabel.setText("👤 " + employee.getName() + " " + employee.getSurname());
                 emailLabel.setText("📧 " + employee.getEmail());
                 phoneLabel.setText("📞 " + employee.getPhone());
-                serviceLabel.setText("Service : " + employee.getServiceName());
+                serviceLabel.setText( employee.getServiceName());
                 siteLabel.setText("Site : " + employee.getSiteCity());
 
 
                 System.out.println(employee.getServiceName());
-                if (employee.getPhoto() != null && !employee.getPhoto().isEmpty()) {
-                    photoView.setImage(new Image(employee.getPhoto(), true));
-                }
+
 
                 layout.getChildren().clear();
                 // si je fais pas ça, il refuse d'afficher les new children. Obligé de faire 3 fois la vérif admin
                 //distinctement, car il ne gère pas add All sur les deux boutons en même temps
-                layout.getChildren().addAll(nameLabel, emailLabel, phoneLabel, photoView, serviceLabel, siteLabel);
+                layout.getChildren().addAll(nameLabel, emailLabel, phoneLabel, serviceLabel, siteLabel);
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Update"
                 if (AdminController.getInstance().getAdminButton()) {

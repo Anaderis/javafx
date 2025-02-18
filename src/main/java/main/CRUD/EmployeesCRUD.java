@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -14,6 +16,7 @@ import main.SiteController;
 import model.Employee;
 import model.Services;
 import model.Site;
+import utils.SceneManager;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -190,6 +193,7 @@ public class EmployeesCRUD {
             if (response.statusCode() == 200 || response.statusCode() == 201) {
                 System.out.println("✅ Mise à jour réussie !");
                 popupStage.close();
+                handleBackToHome();
             } else {
                 System.out.println("❌ Erreur de mise à jour : " + response.body());
             }
@@ -276,6 +280,7 @@ public class EmployeesCRUD {
                 System.out.println("✅ Employé créé avec succès !");
                 showAlert("Succès", "Employé créé avec succès.", Alert.AlertType.INFORMATION);
                 popupStage.close();
+                handleBackToHome();
             } else {
                 System.out.println("❌ Erreur lors de la création de l'employé !");
                 System.out.println("📡 Code HTTP : " + response.statusCode());
@@ -333,6 +338,7 @@ public class EmployeesCRUD {
                 System.out.println("✅ Suppression réussie !");
                 Platform.runLater(() -> {
                     popupStage.close();
+                    handleBackToHome();
                     EmployeesController.getInstance().loadEmployees(); // ✅ Recharge la liste après suppression
                 });
             } else {
@@ -350,11 +356,27 @@ public class EmployeesCRUD {
     public void handleCancel(){
         try {
             popupStage.close();
+            handleBackToHome();
         } catch (Exception e) {
             e.printStackTrace();
     }
     }
 
+    private void handleBackToHome() {
+        try {
+            Stage stage = (Stage) popupStage.getOwner();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/home.fxml"));
+            Scene scene = new Scene(loader.load());
+            SceneManager.getInstance().setOnSceneChange(SceneManager.getInstance()::setupGlobalKeyListener);
+            // Définir la scène avec SceneManager
+            SceneManager.getInstance().changeScene(scene);
+            stage.setScene(scene);
+            stage.setTitle("Home");
+            stage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
