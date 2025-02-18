@@ -1,5 +1,6 @@
 package main.CRUD;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -9,7 +10,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import main.HomeController;
+import main.ServicesController;
 import main.SiteController;
+import model.Employee;
 import model.Site;
 
 import java.net.URI;
@@ -18,6 +21,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -95,10 +99,53 @@ public class SiteCRUD {
             ObjectMapper objectMapper = new ObjectMapper();
             String requestBody = objectMapper.writeValueAsString(updatedFields);
 
+            // 🔹 Vérification des employés associés au service
+            String url = "http://localhost:8081/employee/readBySite/" + this.site.getId();
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(url))
+                    .GET()
+                    .build();
+
+            client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                    .thenApply(HttpResponse::body)
+                    .thenApply(json -> {
+                        try {
+                            return objectMapper.readValue(json, new TypeReference<List<Employee>>() {});
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            return List.of(); // Retourne une liste vide en cas d'erreur
+                        }
+                    })
+                    .thenAccept(employees -> {
+                        if (employees.isEmpty()) {
+                            // ✅ Aucun employé associé → Mise à jour possible
+                            updateSite(requestBody);
+                        } else {
+                            // 🚫 Il y a des employés → Afficher un message d'erreur
+                            System.out.println("❌ Impossible de modifier, employés présents !");
+                            Platform.runLater(() ->
+                                    showAlert("Erreur", "Impossible de modifier ce site, il contient encore des employés.", Alert.AlertType.ERROR)
+                            );
+                        }
+                    })
+                    .exceptionally(e -> {
+                        e.printStackTrace();
+                        System.out.println("❌ Erreur lors de la vérification des employés : " + e.getMessage());
+                        return null;
+                    });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("❌ Erreur lors de la mise à jour du service : " + e.getMessage());
+        }
+    }
+
+    public void updateSite(String requestBody) {
+        try {
             // 🔹 Vérifie l'URL de l'API
             String apiUrl = "http://localhost:8081/site/update/" + this.site.getId();
             System.out.println("📡 URL API : " + apiUrl);
-            System.out.println("📡 Données envoyées : " + requestBody);
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
@@ -111,15 +158,22 @@ public class SiteCRUD {
 
             if (response.statusCode() == 200 || response.statusCode() == 201) {
                 System.out.println("✅ Mise à jour réussie !");
-                popupStage.close();
+                Platform.runLater(() -> popupStage.close()); // Ferme la fenêtre après MAJ
             } else {
                 System.out.println("❌ Erreur de mise à jour : " + response.body());
+                Platform.runLater(() ->
+                        showAlert("Erreur", "Échec de la mise à jour du site.", Alert.AlertType.ERROR)
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("❌ Erreur lors de la mise à jour du site : " + e.getMessage());
+            Platform.runLater(() ->
+                    showAlert("Erreur", "Une erreur est survenue lors de la mise à jour.", Alert.AlertType.ERROR)
+            );
         }
     }
+
 
     /*-------------------------------------CREATE-------------------------------------*/
     @FXML
@@ -206,25 +260,61 @@ public class SiteCRUD {
 
     /*-----------------------------------DELETE---------------------------------*/
 
-    @FXML
     public void handleDelete() {
         if (this.site == null || this.site.getId() == null) {
             System.out.println("❌ Erreur : Aucun site enregistré ou ID manquant !");
             return;
         }
 
-        System.out.println("🗑 Suppression du site ID: " + this.site.getId());
+        System.out.println("🗑 Vérification des employés pour le site ID: " + this.site.getId());
 
+        String url = "http://localhost:8081/employee/readBySite/" + this.site.getId();
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(url))
+                .GET()
+                .build();
+
+        client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+                .thenApply(HttpResponse::body)
+                .thenApply(json -> {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        return objectMapper.readValue(json, new TypeReference<List<Employee>>() {});
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        return List.of(); // Retourne une liste vide en cas d'erreur
+                    }
+                })
+                .thenAccept(employees -> {
+                    if (employees.isEmpty()) {
+                        deleteSite();
+                    } else {
+                        System.out.println("❌ Impossible de supprimer, employés présents !");
+                        Platform.runLater(() ->
+                                showAlert("Erreur", "Impossible de supprimer ce service, il contient encore des employés.", Alert.AlertType.ERROR)
+                        );
+                    }
+                })
+                .exceptionally(e -> {
+                    e.printStackTrace();
+                    System.out.println("❌ Erreur lors de la vérification des employés : " + e.getMessage());
+                    return null;
+                });
+    }
+
+
+    // Méthode séparée pour la suppression
+    private void deleteSite() {
         try {
-            // 🔹 Vérifie l'URL de l'API pour la suppression
             String apiUrl = "http://localhost:8081/site/delete/" + this.site.getId();
-            System.out.println("📡 URL API : " + apiUrl);
+            System.out.println("📡 Suppression en cours via l'API : " + apiUrl);
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(apiUrl))
                     .header("Content-Type", "application/json")
-                    .DELETE() // ✅ Utilisation de DELETE
+                    .DELETE()
                     .build();
 
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
@@ -233,19 +323,22 @@ public class SiteCRUD {
                 System.out.println("✅ Suppression réussie !");
                 Platform.runLater(() -> {
                     popupStage.close();
-                    SiteController.getInstance().loadSite(); // ✅ Recharge la liste après suppression
+                    SiteController.getInstance().loadSite(); // Recharge la liste des services
                 });
             } else {
                 System.out.println("❌ Erreur de suppression : " + response.body());
-                showAlert("Erreur", "Impossible de supprimer ce site.", Alert.AlertType.ERROR);
+                Platform.runLater(() ->
+                        showAlert("Erreur", "Impossible de supprimer ce service.", Alert.AlertType.ERROR)
+                );
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("❌ Erreur lors de la suppression du site : " + e.getMessage());
-            showAlert("Erreur", "Une erreur est survenue lors de la suppression.", Alert.AlertType.ERROR);
+            System.out.println("❌ Erreur lors de la suppression du service : " + e.getMessage());
+            Platform.runLater(() ->
+                    showAlert("Erreur", "Une erreur est survenue lors de la suppression.", Alert.AlertType.ERROR)
+            );
         }
     }
-
 
     public void handleCancel(){
         try {

@@ -25,7 +25,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class EmployeesController {
 
@@ -36,6 +38,9 @@ public class EmployeesController {
     @FXML
     private Button createEmployee;
 
+    //Mapping pour récupérer le nom du service par employé
+    public static final Map<Long, String> servicesMap = new HashMap<>();
+    public static final Map<Long, String> siteMap = new HashMap<>();
 
     private ObservableList<Employee> employeeList = FXCollections.observableArrayList();
     private FilteredList<Employee> filteredEmployees;
@@ -178,6 +183,8 @@ public class EmployeesController {
         private final Label nameLabel = new Label();
         private final Label emailLabel = new Label();
         private final Label phoneLabel = new Label();
+        private final Label serviceLabel = new Label();
+        private final Label siteLabel = new Label();
         private final VBox layout = new VBox(nameLabel, emailLabel, phoneLabel, photoView);
         private final Button updateButton = new Button("Mettre à jour");
         private final Button deleteButton = new Button("Supprimer");
@@ -187,6 +194,7 @@ public class EmployeesController {
             layout.setStyle("-fx-padding: 10px; -fx-border-color: lightgray; -fx-border-radius: 5px; -fx-background-color: white; -fx-text-fill: black; -fx-font-family: 'Droid Sans Fallback'; -fx-font-size: 18px;");
             updateButton.setStyle("-fx-background-color: #db6da8; -fx-text-fill:  black;");
             deleteButton.setStyle("-fx-background-color: #4f5f70; -fx-text-fill: white;");
+
             updateButton.setCursor(Cursor.HAND);
             deleteButton.setCursor(Cursor.HAND);
             photoView.setFitWidth(50);
@@ -204,7 +212,11 @@ public class EmployeesController {
                 nameLabel.setText("👤 " + employee.getName() + " " + employee.getSurname());
                 emailLabel.setText("📧 " + employee.getEmail());
                 phoneLabel.setText("📞 " + employee.getPhone());
+                serviceLabel.setText("Service : " + employee.getServiceName());
+                siteLabel.setText("Site : " + employee.getSiteName());
 
+
+                System.out.println(employee.getServiceName());
                 if (employee.getPhoto() != null && !employee.getPhoto().isEmpty()) {
                     photoView.setImage(new Image(employee.getPhoto(), true));
                 }
@@ -212,7 +224,7 @@ public class EmployeesController {
                 layout.getChildren().clear();
                 // si je fais pas ça, il refuse d'afficher les new children. Obligé de faire 3 fois la vérif admin
                 //distinctement, car il ne gère pas add All sur les deux boutons en même temps
-                layout.getChildren().addAll(nameLabel, emailLabel, phoneLabel, photoView);
+                layout.getChildren().addAll(nameLabel, emailLabel, phoneLabel, photoView, serviceLabel, siteLabel);
 
                 // ✅ Vérifier si l'admin est activé pour afficher le bouton "Update"
                 if (AdminController.getInstance().getAdminButton()) {

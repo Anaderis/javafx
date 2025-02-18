@@ -20,6 +20,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -57,47 +58,51 @@ public class EmployeesCRUD {
 
 
     public void initialize() {
-        /*----------------Liste des sites menu déroulant----------------*/
-        ObservableList<Site> siteList = SiteController.getSiteList();
-        siteComboBox.setItems(siteList);
 
-        // 🔹 Convertit les objets `Site` en texte pour l'affichage
-        siteComboBox.setConverter(new StringConverter<Site>() {
-            @Override
-            public String toString(Site site) {
-                return site != null ? site.getName() : "";
-            }
+        if(siteComboBox!=null) {
+            /*----------------Liste des sites menu déroulant----------------*/
+            ObservableList<Site> siteList = SiteController.getSiteList();
+            siteComboBox.setItems(siteList);
 
-            @Override
-            public Site fromString(String string) {
-                return siteComboBox.getItems().stream()
-                        .filter(site -> site.getName().equals(string))
-                        .findFirst()
-                        .orElse(null);
-            }
-        });
+            // 🔹 Convertit les objets `Site` en texte pour l'affichage
+            siteComboBox.setConverter(new StringConverter<Site>() {
+                @Override
+                public String toString(Site site) {
+                    return site != null ? site.getName() : "";
+                }
 
-        /*----------------Liste des services menu déroulant----------------*/
-        ObservableList<Services> servicesList = ServicesController.getServicesList();
-        servicesComboBox.setItems(servicesList);
+                @Override
+                public Site fromString(String string) {
+                    return siteComboBox.getItems().stream()
+                            .filter(site -> site.getName().equals(string))
+                            .findFirst()
+                            .orElse(null);
+                }
+            });
+        }
 
-        // 🔹 Convertit les objets `Site` en texte pour l'affichage
-        servicesComboBox.setConverter(new StringConverter<Services>() {
-            @Override
-            public String toString(Services services) {
-                return services != null ? services.getName() : "";
-            }
+        if(servicesComboBox!=null) {
+            /*----------------Liste des services menu déroulant----------------*/
+            ObservableList<Services> servicesList = ServicesController.getServicesList();
+            servicesComboBox.setItems(servicesList);
 
-            @Override
-            public Services fromString(String string) {
-                return servicesComboBox.getItems().stream()
-                        .filter(services -> services.getName().equals(string))
-                        .findFirst()
-                        .orElse(null);
-            }
-        });
+            // 🔹 Convertit les objets `Site` en texte pour l'affichage
+            servicesComboBox.setConverter(new StringConverter<Services>() {
+                @Override
+                public String toString(Services services) {
+                    return services != null ? services.getName() : "";
+                }
 
-        photoField.setText("http://example.png");
+                @Override
+                public Services fromString(String string) {
+                    return servicesComboBox.getItems().stream()
+                            .filter(services -> services.getName().equals(string))
+                            .findFirst()
+                            .orElse(null);
+                }
+            });
+        }
+        if(photoField!=null) photoField.setText("http://example.png");
     }
 
 
@@ -112,6 +117,13 @@ public class EmployeesCRUD {
             if(phoneField != null)phoneField.setText(employee.getPhone());
             if (cityField!= null)cityField.setText(employee.getCity());
             if (adminCheckBox != null)adminCheckBox.setSelected(employee.getAdmin());
+            if(addressField!=null)addressField.setText(employee.getAddress());
+            if (postcodeField!=null)postcodeField.setText(employee.getPostcode());
+            if (entryDatePicker!=null)entryDatePicker.setValue(LocalDate.parse(employee.getEntrydate()));
+            if(mobileField!=null)mobileField.setText(employee.getMobile());
+            if(loginField!=null)loginField.setText(employee.getLogin());
+            if(passwordField!=null)passwordField.setText(employee.getPassword());
+            if(adminPasswordField!=null)adminPasswordField.setText(employee.getAdminPassword());
         }
     }
 

@@ -22,10 +22,29 @@ public class Employee {
     private String login;
     private String password;
     private String photo;
+
+    public String getServiceName() {
+        return serviceName;
+    }
+
+    public void setServiceName(String serviceName) {
+        this.serviceName = serviceName;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public void setSiteName(String siteName) {
+        this.siteName = siteName;
+    }
+
     private String adminPassword;
 
     private Long siteId; // ID du site
     private Long servicesId;
+    private String serviceName;
+    private String siteName;
 
     /*------------SINGLETON--------------*/
     private static Employee instance;

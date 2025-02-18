@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import main.CRUD.SiteCRUD;
+import model.Services;
 import model.Site;
 
 import java.net.URI;
@@ -22,6 +23,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+
+import static main.EmployeesController.servicesMap;
+import static main.EmployeesController.siteMap;
 
 public class SiteController {
 
@@ -68,7 +72,21 @@ public class SiteController {
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenAccept(this::populateList)
+                .thenAccept(response -> {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        List<Site> siteList = mapper.readValue(response, new TypeReference<List<Site>>() {});
+
+                        // 🔹 Stocke les services dans la Map (id_service -> nom_service)
+                        for (Site site : siteList) {
+                            siteMap.put(site.getId(), site.getName());
+                        }
+
+                        System.out.println("✅ Liste des services chargée avec succès !");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
                 .exceptionally(e -> {
                     e.printStackTrace();
                     return null;

@@ -23,6 +23,8 @@ import java.util.List;
 import main.CRUD.ServicesCRUD;
 import model.Services;
 
+import static main.EmployeesController.servicesMap;
+
 public class ServicesController {
 
     @FXML
@@ -70,7 +72,21 @@ public class ServicesController {
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
-                .thenAccept(this::populateList)
+                .thenAccept(response -> {
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        List<Services> servicesList = mapper.readValue(response, new TypeReference<List<Services>>() {});
+
+                        // 🔹 Stocke les services dans la Map (id_service -> nom_service)
+                        for (Services service : servicesList) {
+                            servicesMap.put(service.getId(), service.getName());
+                        }
+
+                        System.out.println("✅ Liste des services chargée avec succès !");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                })
                 .exceptionally(e -> {
                     e.printStackTrace();
                     return null;
