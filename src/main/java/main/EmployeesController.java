@@ -75,6 +75,15 @@ public class EmployeesController {
         });
     }
 
+    /*----Eviter d'afficher des employés non filtrés-----*/
+    public void clearEmployeeList() {
+        Platform.runLater(() -> {
+            employeesListView.getItems().clear(); // 🔹 Efface complètement la liste
+            System.out.println("🔄 Liste des employés vidée avant rechargement !");
+        });
+    }
+
+
     /*----------------Connexion API envoi requête HTTP - GET----------------*/
 
     public void loadEmployees() {
@@ -94,7 +103,6 @@ public class EmployeesController {
     }
 
     /*--------------------Recherche Employé PAR SERVICE ------------------------*/
-
     public void loadEmployeesByService(Long serviceId) {
         String url = "http://localhost:8081/employee/readByService/" + serviceId;
 
@@ -104,15 +112,24 @@ public class EmployeesController {
                 .GET()
                 .build();
 
+        System.out.println("🔍 Requête envoyée à : " + url);
+
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(responseBody -> {
                     Platform.runLater(() -> {
-                        employeeList.clear(); // ✅ Vide la liste avant de la mettre à jour
+                        clearEmployeeList(); // 🔹 Efface d'abord l'ancienne liste
                         populateList(responseBody);
                     });
                 })
                 .exceptionally(e -> {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText("Impossible de récupérer les employés");
+                        alert.setContentText("Erreur : " + e.getMessage());
+                        alert.showAndWait();
+                    });
                     e.printStackTrace();
                     return null;
                 });
@@ -120,8 +137,6 @@ public class EmployeesController {
 
 
     /*--------------------Recherche Employé PAR SITE ------------------------*/
-
-
     public void loadEmployeesBySite(Long siteId) {
         String url = "http://localhost:8081/employee/readBySite/" + siteId;
 
@@ -131,19 +146,30 @@ public class EmployeesController {
                 .GET()
                 .build();
 
+        System.out.println("🔍 Requête envoyée à : " + url);
+
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(HttpResponse::body)
                 .thenAccept(responseBody -> {
                     Platform.runLater(() -> {
-                        employeeList.clear(); // ✅ Vide la liste avant de la mettre à jour
+                        clearEmployeeList(); // 🔹 Efface d'abord l'ancienne liste
                         populateList(responseBody);
                     });
                 })
                 .exceptionally(e -> {
+                    Platform.runLater(() -> {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Erreur");
+                        alert.setHeaderText("Impossible de récupérer les employés");
+                        alert.setContentText("Erreur : " + e.getMessage());
+                        alert.showAndWait();
+                    });
                     e.printStackTrace();
                     return null;
                 });
     }
+
+
 
 
     /*------------------ Affichage de la Liste des employés ---------------------------*/

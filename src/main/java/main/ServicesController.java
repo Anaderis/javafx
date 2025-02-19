@@ -157,22 +157,34 @@ public class ServicesController {
 
     private void openEmployeesPage(Long serviceId) {
         try {
-            System.out.println("OpenEmployeePage"+ serviceId);
-            Stage stage = (Stage) servicesListView.getScene().getWindow();
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
-            Scene scene = new Scene(loader.load());
+            System.out.println("🔹 Chargement de la page des employés pour le service ID : " + serviceId);
 
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
+            Parent root = loader.load();
+
+            // ✅ Vérification du contrôleur après chargement
             EmployeesController controller = loader.getController();
-            //récupère une instance de employee controller pour accéder à la function loadEmployeebyService
-            controller.loadEmployeesByService(serviceId); // Load filtered employees
-            System.out.println(serviceId);
-            stage.setScene(scene);
+            if (controller != null) {
+                System.out.println("✅ Contrôleur chargé avec succès !");
+
+                // 🛠️ IMPORTANT : Vider la liste des employés avant de recharger
+                controller.clearEmployeeList();
+
+                // 📌 Charge les employés filtrés par Service ID
+                controller.loadEmployeesByService(serviceId);
+            } else {
+                System.out.println("❌ Erreur : Impossible de récupérer EmployeesController !");
+            }
+
+            Stage stage = (Stage) servicesListView.getScene().getWindow(); // Assurez-vous que serviceListView est bien défini dans FXML
+            stage.setScene(new Scene(root));
             stage.setTitle("Employees in Selected Service");
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     /*--------------- Création des éléments de la liste : design, boutons etc-----------------*/
     /*--- Récupère la fonction updateItem de Employee et la modifie----*/

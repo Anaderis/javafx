@@ -155,20 +155,34 @@ public class SiteController {
 
     private void openEmployeesPage(Long siteId) {
         try {
-            Stage stage = (Stage) siteListView.getScene().getWindow();
+            System.out.println("🔹 Chargement de la page des employés pour le site ID : " + siteId);
+
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/employee.fxml"));
-            Scene scene = new Scene(loader.load());
+            Parent root = loader.load();
 
+            // ✅ Vérification du contrôleur après chargement
             EmployeesController controller = loader.getController();
-            controller.loadEmployeesBySite(siteId); // Load filtered employees
+            if (controller != null) {
+                System.out.println("✅ Contrôleur chargé avec succès !");
 
-            stage.setScene(scene);
+                // 🛠️ IMPORTANT : Vider la liste des employés avant de recharger
+                controller.clearEmployeeList();
+
+                // 📌 Charge les employés filtrés par Site ID
+                controller.loadEmployeesBySite(siteId);
+            } else {
+                System.out.println("❌ Erreur : Impossible de récupérer EmployeesController !");
+            }
+
+            Stage stage = (Stage) siteListView.getScene().getWindow();
+            stage.setScene(new Scene(root));
             stage.setTitle("Employees in Selected Site");
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     /*--------------- Création des éléments de la liste : design, boutons etc-----------------*/
             /*--- Récupère la fonction updateItem de Employee et la modifie----*/
