@@ -78,8 +78,8 @@ public class EmployeesController {
     /*----Eviter d'afficher des employés non filtrés-----*/
     public void clearEmployeeList() {
         Platform.runLater(() -> {
-            employeesListView.getItems().clear(); // 🔹 Efface complètement la liste
-            System.out.println("🔄 Liste des employés vidée avant rechargement !");
+            employeesListView.setItems(FXCollections.observableArrayList()); // ⚡ Remplace la liste par une nouvelle
+            System.out.println("🔄 Liste des employés vidée et remplacée !");
         });
     }
 
