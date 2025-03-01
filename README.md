@@ -3,7 +3,7 @@
 ## Main objectives
 
 As part of a school project, I decided to create an application using **JAVAFX**, in order for a fictional company called "Kybu" to access and manage all the employees.
-All the database information are accessible through a **REST API**. As Kybu is a company specialized in selling Marvel, Nintendo and Blizzard goodies, I chose to create the design accordingly.
+All the database information are accessible through a **REST API**. The API I created is also available on my GitHub profile. As Kybu is a company specialized in selling Marvel, Nintendo and Blizzard goodies, I chose to create the design accordingly.
 
 The main features of this application are :
 - **Dynamic filters** using the name, surname or email address.
